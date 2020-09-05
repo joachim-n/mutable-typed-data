@@ -616,7 +616,7 @@ class DataDefinition {
   }
 
   public function getOptions(): array {
-    return $this->options;
+    return $this->options ?? [];
   }
 
   public function setValidators(string ...$validators): self {
