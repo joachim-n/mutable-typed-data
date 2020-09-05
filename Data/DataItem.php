@@ -585,9 +585,10 @@ abstract class DataItem {
           $ref = $ref[$child_name];
         }
         else {
-          throw new InvalidDataAddressException(sprintf("Unable to get child item '%s' from item with address '%s'.",
+          throw new InvalidDataAddressException(sprintf("Unable to get child item '%s' from item with address '%s' in request for item '%s'.",
             $child_name,
-            $ref->getAddress()
+            $ref->getAddress(),
+            $address
           ));
         }
       }
@@ -605,9 +606,10 @@ abstract class DataItem {
           $ref = $ref->get($child_name);
         }
         else {
-          throw new InvalidDataAddressException(sprintf("Unable to get child item '%s' from item with address '%s'.",
+          throw new InvalidDataAddressException(sprintf("Unable to get child item '%s' from item with address '%s' in request for item '%s'.",
             $child_name,
-            $ref->getAddress()
+            $ref->getAddress(),
+            $address
           ));
         }
       }
