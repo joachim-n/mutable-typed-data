@@ -103,6 +103,42 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     return isset($this->properties[$name]);
   }
 
+  /**
+   * Gets a property definition.
+   *
+   * This is defined here rather than allowing the call to pass through to the
+   * definition, because subclasses may change their properties dynamically.
+   *
+   * @param string $name
+   *   The property name.
+   *
+   * @return \MutableTypedData\Definition\DataDefinition
+   *   The definition.
+   *
+   * @throws \MutableTypedData\Exception\InvalidAccessException
+   *   Throws an exception if the property does not exist, or if it is internal
+   *   and the data is not set to show internals.
+   */
+  public function getProperty(string $name): DataDefinition {
+    if (!$this->hasProperty($name)) {
+      throw new InvalidAccessException(sprintf("Attempt to get definition for nonexistent property '%s' at %s.",
+        $name,
+        $this->getAddress()
+      ));
+    }
+
+    $property = $this->properties[$name];
+
+    if (!$this->revealInternal && $property->isInternal()) {
+      throw new InvalidAccessException(sprintf("Attempt to get internal property '%s' at %s.",
+        $name,
+        $this->getAddress()
+      ));
+    }
+
+    return $this->properties[$name];
+  }
+
   public function __set($name, $value) {
     if (!array_key_exists($name, $this->properties)) {
       throw new InvalidAccessException(sprintf("Attempt to set nonexistent property '%s' at %s.",
