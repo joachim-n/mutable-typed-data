@@ -28,7 +28,7 @@ or complex, with child properties which are in turn simple:
 
 ```
 $complex_data->alpha = 42;
-$complex_data->beta = 'cake;
+$complex_data->beta = 'cake';
 $complex_data->gamma = TRUE;
 ```
 
