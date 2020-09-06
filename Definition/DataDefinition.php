@@ -459,7 +459,7 @@ class DataDefinition {
    *
    * @return self
    */
-  public function setMachineName($name): self {
+  public function setName($name): self {
     if (!empty($this->name) && $this->name != $name) {
       throw new InvalidDefinitionException("Machine name of property {$this->name} can't be changed to {$name}.");
     }
@@ -471,6 +471,15 @@ class DataDefinition {
     $this->name = $name;
 
     return $this;
+  }
+
+  /**
+   * @deprecated
+   *
+   * Use self::setName().
+   */
+  public function setMachineName($name): self {
+    return $this->setName($name);
   }
 
   public function getName(): ?string {
