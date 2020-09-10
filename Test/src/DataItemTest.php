@@ -100,7 +100,7 @@ class DataItemTest extends TestCase {
   public function testGetParent() {
     $complex_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('complex')
-        ->setMachineName('root')
+        ->setName('root')
         ->setProperties([
           'one' => DataDefinition::create('complex')
             ->setMultiple(TRUE)
@@ -175,7 +175,7 @@ class DataItemTest extends TestCase {
     // Data item with a root machine name.
     $complex_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('complex')
-        ->setMachineName('root')
+        ->setName('root')
         ->setLabel('Root')
         ->setRequired(TRUE)
         ->setProperties([
@@ -416,7 +416,7 @@ class DataItemTest extends TestCase {
    */
   public function testDefaults() {
     $definition = DataDefinition::create('complex')
-      ->setMachineName('complex_data')
+      ->setName('complex_data')
       ->setProperties([
         'scalar_no_default' => DataDefinition::create('string'),
         'scalar_default' => DataDefinition::create('string')
@@ -628,7 +628,7 @@ class DataItemTest extends TestCase {
   public function testDefaultExpressionAddressConversion() {
     $complex_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('complex')
-        ->setMachineName('root')
+        ->setName('root')
         ->setProperties([
           'one' => DataDefinition::create('complex')
             ->setMultiple(TRUE)
@@ -878,7 +878,7 @@ class DataItemTest extends TestCase {
     $factory_class = \MutableTypedData\Fixtures\Factory\FactoryWithValidators::class;
 
     $definition = DataDefinition::create('string')
-      ->setMachineName('root')
+      ->setName('root')
       ->setLabel('Colour string')
       ->setValidators('colour');
 
@@ -945,7 +945,7 @@ class DataItemTest extends TestCase {
    */
   public function testImportExport() {
     $definition = DataDefinition::create('complex')
-      ->setMachineName('root')
+      ->setName('root')
       ->setLabel('Label')
       ->setRequired(TRUE)
       ->setProperties([
@@ -1116,7 +1116,7 @@ class DataItemTest extends TestCase {
    */
   public function testWalk() {
     $definition = DataDefinition::create('complex')
-      ->setMachineName('root')
+      ->setName('root')
       ->setLabel('Label')
       ->setRequired(TRUE)
       ->setProperties([

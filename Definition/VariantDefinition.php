@@ -40,7 +40,7 @@ class VariantDefinition {
 
     // Fill in machine names as a convenience.
     foreach ($this->properties as $name => $property) {
-      $property->setMachineName($name);
+      $property->setName($name);
     }
 
     return $this;
@@ -49,7 +49,7 @@ class VariantDefinition {
   public function addProperties(array $properties): self {
     foreach ($properties as $name => $property) {
       // Fill in machine names as a convenience.
-      $property->setMachineName($name);
+      $property->setName($name);
 
       $this->properties[$name] = $property;
     }

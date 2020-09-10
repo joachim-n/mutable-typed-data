@@ -205,7 +205,7 @@ class DataDefinition {
     foreach ($variants as $variant_name => $variant) {
       $properties = $variant->getProperties();
       foreach ($properties as $name => $property) {
-        $property->setMachineName($name);
+        $property->setName($name);
       }
     }
 
@@ -283,7 +283,7 @@ class DataDefinition {
 
     // Fill in machine names as a convenience.
     foreach ($this->properties as $name => $property) {
-      $property->setMachineName($name);
+      $property->setName($name);
     }
 
     return $this;
@@ -412,7 +412,7 @@ class DataDefinition {
 
     foreach ($properties as $name => $property) {
       // Fill in machine names as a convenience.
-      $property->setMachineName($name);
+      $property->setName($name);
 
       // Explicitly unset an existing property, so that the incoming order is
       // used.

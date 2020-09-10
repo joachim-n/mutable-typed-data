@@ -98,7 +98,7 @@ class DataDefinitionTest extends TestCase {
     $this->assertEquals(['alpha', 'beta'], array_keys($definition->getProperties()));
 
     $definition->addProperty(DataDefinition::create('string')
-      ->setMachineName('gamma')
+      ->setName('gamma')
       ->setLabel('Label')
       ->setRequired(TRUE)
     );
