@@ -1054,7 +1054,12 @@ class DataItemTest extends TestCase {
             'old_two' => DataDefinition::create('string')
               ->setLabel('Label')
               ->setRequired(TRUE)
-          ])
+          ]),
+        'child_changes' => DataDefinition::create('complex')
+          ->setMultiple(TRUE)
+          ->setProperties([
+            'old' => DataDefinition::create('string')
+          ]),
       ]);
 
     $new_definition = DataDefinition::create('complex')
@@ -1071,7 +1076,13 @@ class DataItemTest extends TestCase {
             'new_two' => DataDefinition::create('string')
               ->setLabel('Label')
               ->setRequired(TRUE)
-          ])
+          ]),
+        'child_changes' => DataDefinition::create('complex')
+          ->setMultiple(TRUE)
+          ->setProperties([
+            'new' => DataDefinition::create('string')
+          ]),
+
       ]);
 
     $complex_data = DataItemFactory::createFromDefinition($old_definition);
@@ -1082,6 +1093,11 @@ class DataItemTest extends TestCase {
         ],
       ],
       'stays' => 'bar',
+      'child_changes' => [
+        0 => [
+          'old' => 'biz',
+        ]
+      ],
     ]);
 
     $export = $complex_data->export();

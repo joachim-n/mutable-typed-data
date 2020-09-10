@@ -291,6 +291,26 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function import($value) {
+    if (empty($value)) {
+      return;
+    }
+
+    foreach ($value as $delta => $item_value) {
+      if (isset($this->value[$delta])) {
+        $this->value[$delta]->import($item_value);
+      }
+      else {
+        // TODO: check delta is correct here?
+        $item_data = $this->createItem();
+        $item_data->import($item_value);
+      }
+    }
+  }
+
   public function validate(): array {
     $violations = parent::validate();
 
