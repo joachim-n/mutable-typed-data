@@ -178,6 +178,13 @@ class DataItemFactory {
       $item = new ArrayData($definition);
     }
     else {
+      if (!isset(static::$types[$definition->getType()])) {
+        throw new InvalidDefinitionException(sprintf("Unknown data type '%s' at '%s'.",
+          $definition->getType(),
+          $definition->getName()
+        ));
+      }
+
       $class = static::$types[$definition->getType()];
 
       $item = new $class($definition);
