@@ -215,7 +215,10 @@ class MutableData extends ComplexData {
     // TODO: needs tests!
     if (!$skip_mapping && $mapping = $this->definition->getVariantMapping()) {
       if (!isset($mapping[$variant_property_value])) {
-        throw new InvalidInputException("Invalid variant.");
+        throw new InvalidInputException(sprintf("Invalid variant '%s' at address %s.",
+          $variant_property_value,
+          $this->getAddress()
+        ));
       }
 
       $this->variant = $mapping[$variant_property_value];
