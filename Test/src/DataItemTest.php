@@ -619,7 +619,7 @@ class DataItemTest extends TestCase {
       'multiple_scalar_default_more_values' => [],
     ]);
 
-    $this->assertEmpty($complex_data->multiple_scalar_default_more_values->get());
+    $this->assertEquals([], $complex_data->multiple_scalar_default_more_values->get());
   }
 
   /**
