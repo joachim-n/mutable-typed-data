@@ -359,8 +359,9 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
   }
 
   public function __get($name) {
-    throw new InvalidAccessException(sprintf("Array data cannot be accessed as an object at address %s; property was $name.",
-      $this->getAddress()
+    throw new InvalidAccessException(sprintf("Array data cannot be accessed as an object at address '%s'; property was '%s'.",
+      $this->getAddress(),
+      $name
     ));
   }
 
