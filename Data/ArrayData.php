@@ -295,9 +295,8 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
    * {@inheritdoc}
    */
   public function import($value) {
-    if (empty($value)) {
-      return;
-    }
+    // Always treat this as set, even if the incoming value is an empty array.
+    $this->set = TRUE;
 
     foreach ($value as $delta => $item_value) {
       if (isset($this->value[$delta])) {

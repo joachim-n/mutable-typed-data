@@ -256,6 +256,9 @@ class ComplexData extends DataItem implements \IteratorAggregate {
   }
 
   public function import($value) {
+    // Always treat this as set, even if the incoming value is an empty array.
+    $this->set = TRUE;
+
     foreach ($value as $name => $item_value) {
       if (array_key_exists($name, $this->properties)) {
         if (!isset($this->value[$name])) {
@@ -264,7 +267,6 @@ class ComplexData extends DataItem implements \IteratorAggregate {
         }
 
         $this->value[$name]->import($item_value);
-        $this->set = TRUE;
       }
     }
   }

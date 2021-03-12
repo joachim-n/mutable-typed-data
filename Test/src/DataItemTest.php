@@ -517,6 +517,20 @@ class DataItemTest extends TestCase {
     // Text lazy defaults.
     $complex_data->single_complex->lazy_default;
     $this->assertEquals('evaluated', $complex_data->single_complex->lazy_default->value, "The lazy default value was set.");
+
+    // Test defaults don't get set after an empty value is set.
+    // TODO: fill more of these in.
+    $complex_data = \MutableTypedData\Fixtures\Factory\FactoryWithChangeCaseExpressionLanguageFunctions::createFromDefinition($definition);
+
+    $complex_data->multiple_scalar_default_one_value = [];
+    $this->assertSame([], $complex_data->multiple_scalar_default_one_value->items(), "The multiple string default value was set.");
+
+    // Test defaults don't get set after an empty value is imported.
+    // TODO: fill more of these in.
+    $complex_data = \MutableTypedData\Fixtures\Factory\FactoryWithChangeCaseExpressionLanguageFunctions::createFromDefinition($definition);
+
+    $complex_data->multiple_scalar_default_one_value->import([]);
+    $this->assertSame([], $complex_data->multiple_scalar_default_one_value->items(), "The multiple string default value was set.");
   }
 
   /**
