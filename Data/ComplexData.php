@@ -361,11 +361,6 @@ class ComplexData extends DataItem implements \IteratorAggregate {
   public function export() {
     $export = [];
     foreach ($this->value as $name => $value) {
-      // Don't export empty values.
-      if ($value->isEmpty()) {
-        continue;
-      }
-
       $export[$name] = $value->export();
     }
 

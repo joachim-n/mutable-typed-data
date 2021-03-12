@@ -941,7 +941,115 @@ class DataItemTest extends TestCase {
   }
 
   /**
+   * Data provider for testImportExportSingleItem().
+   */
+  public function providerImportExportSingleItem() {
+    // List of the types to test: data definitions and the values that the test
+    // should set on them.
+    $definitions = [
+      'string_multiple_empty' => [
+        'definition' => DataDefinition::create('string')
+          ->setName('property')
+          ->setMultiple(TRUE),
+        'value_initial_export' => [],
+        'value_after_import' => [],
+      ],
+      'string_multiple_empty_with_default' => [
+        'definition' => DataDefinition::create('string')
+          ->setName('property')
+          ->setMultiple(TRUE)
+          ->setLiteralDefault(['a', 'b']),
+        // This is only used when this definition is at the root.
+        'value_initial_export' => ['a', 'b'],
+        'value_after_import' => [],
+      ],
+    ];
+
+    // The data definitions are fitted into various host definitions as well as
+    // solo, so we can for example test a multi-valued empty string at root
+    // level, within a complex item, and within a complex multiple item.
+    $hosts = [
+      // Complex single.
+      'in_complex_single' => [
+        // The type definition gets set as a property on this definition.
+        'definition' => DataDefinition::create('complex'),
+        'value_initial_export' => [],
+        'value_after_import_template' => [
+          // This value gets replaced with the type's 'value_after_import'.
+          'property' => NULL,
+        ],
+      ],
+      'in_complex_multiple' => [
+        'definition' => DataDefinition::create('complex')
+          ->setMultiple(TRUE),
+        'value_initial_export' => [],
+        'value_after_import_template' => [
+          0 => [
+            'property' => NULL,
+          ],
+        ],
+      ],
+    ];
+
+    $data = [];
+    foreach ($definitions as $definition_key => $definition) {
+      $data[$definition_key . '_at_root'] = [
+        'definition' => $definition['definition'],
+        'value_initial_export' => $definition['value_initial_export'],
+        'value_after_import' => $definition['value_after_import'],
+      ];
+
+      foreach ($hosts as $host_key => $host) {
+        // Insert the data item's expected export value into the host's
+        // template.
+        $new_value = $host['value_after_import_template'];
+        array_walk_recursive($new_value, function(&$value, $key, $replacements) {
+          if (isset($replacements[$key])) {
+            $value = $replacements[$key];
+          }
+        }, ['property' => $definition['value_after_import']]);
+
+        $data[$definition_key . '_' . $host_key] = [
+          'definition' => $host['definition']->addProperty($definition['definition']),
+          'value_initial_export' => $host['value_initial_export'],
+          'value_after_import' => $new_value,
+        ];
+      }
+    }
+
+    return $data;
+  }
+
+  /**
    * Tests import and export of data as arrays.
+   *
+   * @dataProvider providerImportExportSingleItem
+   *
+   * @param \MutableTypedData\Definition\DataDefinition $definition
+   *   The data definition.
+   * @param mixed $value_initial_export
+   *   The exported export value of the data without setting any value on it.
+   * @param mixed $value_after_import
+   *   The value to set on the data, which should then match the export.
+   */
+  public function testImportExportSingleItem(DataDefinition $definition, $value_initial_export, $value_after_import) {
+    // dump($definition);
+    $data = DataItemFactory::createFromDefinition($definition);
+
+    $export = $data->export();
+    $this->assertEquals($value_initial_export, $export);
+
+    $data->set($value_after_import);
+
+    $export = $data->export();
+    $this->assertEquals($value_after_import, $export);
+  }
+
+  /**
+   * Tests import and export of data as arrays.
+   *
+   * TODO: fold this into testImportExportSingleItem() as single items, which
+   * are easier to debug.
    */
   public function testImportExport() {
     $definition = DataDefinition::create('complex')
