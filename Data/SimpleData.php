@@ -98,6 +98,9 @@ abstract class SimpleData extends DataItem implements \IteratorAggregate {
     }
 
     // Check a non-empty value satisfied the options.
+    // Note that an empty string is considered non-empty, and so will likely
+    // fail to satisfy the options. UIs should filter empty string responses.
+    // TODO: document this more clearly and obviously.
     if (!$this->isEmpty() && $this->definition->hasOptions()) {
       $options = $this->definition->getOptions();
 
