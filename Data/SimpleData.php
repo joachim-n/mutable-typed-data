@@ -102,7 +102,7 @@ abstract class SimpleData extends DataItem implements \IteratorAggregate {
       $options = $this->definition->getOptions();
 
       if (!isset($options[$this->value])) {
-        $violations[$this->getAddress()][] = strtr('Value @value is not one of the options for @label.', [
+        $violations[$this->getAddress()][] = strtr("Value '@value' is not one of the options for @label.", [
           '@value' => $this->value,
           '@label' => $this->getLabel(),
         ]);
