@@ -309,7 +309,7 @@ class DataDefinition {
    * @throws \Exception
    *  Throws an exception if the property doesn't exit.
    */
-  public function getProperty($name): self {
+  public function getProperty(string $name): self {
     if (!isset($this->properties[$name])) {
       throw new \Exception(sprintf("Property definition '%s' has no child property '$name' defined.",
         $this->name,
