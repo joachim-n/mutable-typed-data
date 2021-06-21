@@ -110,7 +110,7 @@ class DataDefinition {
    * @param string $type
    *  The data type of this definition.
    *
-   * @return self
+   * @return static
    *   The new definition obkect.
    */
   static public function create($type): self {
@@ -120,7 +120,7 @@ class DataDefinition {
   /**
    * Clones this definition for use with a delta item.
    *
-   * @return self
+   * @return static
    *   The new definition.
    */
   public function getDeltaDefinition(): self {
@@ -157,7 +157,7 @@ class DataDefinition {
    * @param DefaultDefinition $default
    *   The default definition.
    *
-   * @return self
+   * @return static
    */
   public function setDefault(DefaultDefinition $default): self {
     $this->default = $default;
@@ -189,7 +189,7 @@ class DataDefinition {
    * @param array $variants
    *   An array of VariantDefinition objects.
    *
-   * @return self
+   * @return static
    */
   public function setVariants(array $variants): self {
     if ($this->type != 'mutable') {
@@ -303,7 +303,7 @@ class DataDefinition {
    * @param string $name
    *  The property name.
    *
-   * @return self
+   * @return static
    *  The definition.
    *
    * @throws \Exception
@@ -329,7 +329,7 @@ class DataDefinition {
    *  The property address. This must be absolute, as definitions aren't aware
    *  of their parent.
    *
-   * @return self
+   * @return static
    *
    * @throws \Exception
    *  Throws an exception if the property doesn't exit.
@@ -399,7 +399,7 @@ class DataDefinition {
    *  definition is overwritten. The replacement property will be in the order
    *  given in the $properties array, not in its original position.
    *
-   * @return self
+   * @return static
    */
   public function addProperties(array $properties): self {
     if ($this->type == 'string') {
@@ -457,7 +457,7 @@ class DataDefinition {
    *   the name should only contain characters that are valid in a PHP property
    *   name.
    *
-   * @return self
+   * @return static
    */
   public function setName($name): self {
     if (!empty($this->name) && $this->name != $name) {
@@ -494,7 +494,7 @@ class DataDefinition {
    * @param string $label
    *   The label. This may contain any characters.
    *
-   * @return self
+   * @return static
    */
   public function setLabel($label): self {
     $this->label = $label;
@@ -518,7 +518,7 @@ class DataDefinition {
    * @param string $description
    *   The description. This may contain any characters.
    *
-   * @return self
+   * @return static
    */
   public function setDescription($description): self {
     $this->description = $description;
@@ -576,7 +576,7 @@ class DataDefinition {
    * @param OptionDefinition ...$options
    *  One or more option definitions.
    *
-   * @return self
+   * @return static
    */
   public function setOptions(OptionDefinition ...$options): self {
     $this->options = [];
@@ -592,7 +592,7 @@ class DataDefinition {
    * @param OptionDefinition $option
    *  A single option definition.
    *
-   * @return self
+   * @return static
    */
   public function addOption(OptionDefinition $option): self {
     $this->options[$option->getValue()] = $option;
@@ -610,7 +610,7 @@ class DataDefinition {
    *    - Array keys are the option values, that is, the data to store.
    *    - Array values are labels, that is, what UIs should show to the user.
    *
-   * @return self
+   * @return static
    */
   public function setOptionsArray(array $options_array): self {
     $this->options = [];
@@ -654,7 +654,7 @@ class DataDefinition {
    *   The mapping array. Keys are option values on this definition; values
    *   are names of variants as set with setVariants().
    *
-   * @return self
+   * @return static
    */
   public function setVariantMapping(array $mapping): self {
     $this->variantMapping = $mapping;

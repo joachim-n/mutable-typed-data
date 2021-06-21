@@ -212,7 +212,7 @@ abstract class DataItem {
   /**
    * Sets this data to show its internal properties when iterated.
    *
-   * @return self
+   * @return static
    *   Returns itself for chaining.
    */
   public function showInternal(): self {
@@ -466,7 +466,7 @@ abstract class DataItem {
   /**
    * Gets this data item's parent in the data structure.
    *
-   * @return self|null
+   * @return static|null
    *   The parent data item, or NULL if this data item is the root.
    */
   public function getParent(): ?self {
@@ -476,7 +476,7 @@ abstract class DataItem {
   /**
    * Gets the root data item of this item's data structure.
    *
-   * @return self
+   * @return static
    *   The root data item.
    */
   public function getRoot(): self {
@@ -544,7 +544,7 @@ abstract class DataItem {
    *    - a relative address in the format '..:SIBLING:ETC' to start
    *      from the current item's parent.
    *
-   * @return self
+   * @return static
    *   The data item.
    *
    * @throw \Exception

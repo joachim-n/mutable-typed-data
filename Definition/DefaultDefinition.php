@@ -61,7 +61,7 @@ class DefaultDefinition {
    * @param string ...$dependencies
    *  The address of the dependencies. These may be relative or absolute.
    *
-   * @return self
+   * @return static
    */
   public function setDependencies(string ...$dependencies): self {
     // TODO: check that these actually occur in the expression, for sanity!!
@@ -72,7 +72,7 @@ class DefaultDefinition {
   /**
    * Removes all the dependencies.
    *
-   * @return self
+   * @return static
    */
   public function removeDependencies(): self {
     $this->dependencies = [];
