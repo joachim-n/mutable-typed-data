@@ -286,7 +286,6 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     if (empty($name)) {
       throw new InvalidAccessException(sprintf(
         "Accessing complex data at %s without a property name.",
-        $name,
         $this->getAddress()
       ));
     }
