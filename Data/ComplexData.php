@@ -181,9 +181,10 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     foreach ($value as $name => $item_value) {
       if (!array_key_exists($name, $this->properties)) {
         throw new InvalidAccessException(sprintf(
-          "Attempt to set nonexistent property '%s' at %s, available properties are: %s.",
+          "Attempt to set nonexistent property '%s' at %s with value '%s', available properties are: %s.",
           $name,
           $this->getAddress(),
+          print_r($item_value, TRUE),
           implode(', ', $this->definition->getPropertyNames())
         ));
       }
