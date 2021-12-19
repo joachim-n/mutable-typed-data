@@ -142,7 +142,7 @@ class MutableData extends ComplexData {
     parent::set($value);
   }
 
-  public function onChange(DataDefinition $definition, string $name, $value) {
+  public function onChange(DataItem $data_item, $value) {
     // Set the type when the value is set on our type property.
     // This is the only place we need to react; we don't need to override
     // __set(), as ComplexData will take care of creating the variant property
@@ -152,7 +152,7 @@ class MutableData extends ComplexData {
     // TODO: possible bug here if the variant property's machine name is also
     // used somewhere else in the data, for instance, if a variant property is
     // complex and has a child property with the same name!!!
-    if ($definition->getName() == $this->typePropertyName) {
+    if ($data_item->getDefinition()->getName() == $this->typePropertyName) {
       $this->setVariant($value);
     }
   }

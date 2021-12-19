@@ -396,14 +396,14 @@ class DataItemTest extends TestCase {
     // doesn't easily allow checking for the order of calls.
     $listener = $this->prophesize();
     $listener->willExtend(DataItem::class);
-    $listener->onChange(Argument::any(), 'value', 'one')->shouldBeCalledTimes(1);
+    $listener->onChange(Argument::any(), 'one')->shouldBeCalledTimes(1);
     $complex_data->setListener($listener->reveal());
 
     $complex_data->single_string = 'one';
 
     $listener = $this->prophesize();
     $listener->willExtend(DataItem::class);
-    $listener->onChange(Argument::any(), 'value', 'two')->shouldBeCalledTimes(1);
+    $listener->onChange(Argument::any(), 'two')->shouldBeCalledTimes(1);
     $complex_data->setListener($listener->reveal());
 
     $complex_data->single_complex->single_complex_string = 'two';

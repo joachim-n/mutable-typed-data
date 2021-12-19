@@ -663,7 +663,7 @@ abstract class DataItem {
     // Child classes should have done the actual work of setting the value.
     // here we bubble up??
     if ($this->parent) {
-      $this->parent->onChange($this->definition, 'value', $value);
+      $this->parent->onChange($this, $value);
     }
   }
 
@@ -699,12 +699,12 @@ abstract class DataItem {
    * @param mixed $value
    *   The value that was set.
    */
-  public function onChange(DataDefinition $definition, string $name, $value) {
+  public function onChange(DataItem $data_item, $value) {
     // Bubble up.
     if ($this->parent) {
       // TODO: should $name change as we bubble up? Or should we pass an
       // address?
-      $this->parent->onChange($this->definition, $name, $value);
+      $this->parent->onChange($data_item, $value);
     }
 
   }

@@ -3,6 +3,7 @@
 namespace MutableTypedData\Fixtures\Data;
 
 use MutableTypedData\Data\ComplexData;
+use MutableTypedData\Data\DataItem;
 use MutableTypedData\Definition\DataDefinition;
 
 /**
@@ -23,10 +24,10 @@ class ListeningComplexData extends ComplexData {
     $this->listener = $listener;
   }
 
-  public function onChange(DataDefinition $definition, string $name, $value) {
-    $this->listener->onChange($definition, $name, $value);
+  public function onChange(DataItem $data_item, $value) {
+    $this->listener->onChange($data_item, $value);
 
-    parent::onChange($definition, $name, $value);
+    parent::onChange($data_item, $value);
   }
 
 }

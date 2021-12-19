@@ -76,7 +76,7 @@ abstract class SimpleData extends DataItem implements \IteratorAggregate {
 
     // Bubble up.
     if ($this->parent) {
-      $this->parent->onChange($this->definition, 'value', $value);
+      $this->parent->onChange($this, $value);
     }
   }
 
