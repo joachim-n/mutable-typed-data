@@ -2138,4 +2138,51 @@ class DataItemTest extends TestCase {
     $this->assertEquals('beta', $mutable_array_data[1]->type->value);
   }
 
+  /**
+   * Test nested mutable data.
+   */
+  public function testNestedMutableData() {
+    $definition = DataDefinition::create('mutable')
+      ->setProperties([
+        'type' => DataDefinition::create('string')
+      ])
+      ->setVariants([
+        'alpha' => VariantDefinition::create()
+          ->setLabel('label')
+          ->setProperties([
+            'alpha_mutable' => DataDefinition::create('mutable')
+              ->setProperties([
+                'alpha_type' => DataDefinition::create('string')
+              ])
+              ->setVariants([
+                'one' => VariantDefinition::create()
+                  ->setLabel('label')
+                  ->setProperties([
+                    'one_a' => DataDefinition::create('string'),
+                    'one_b' => DataDefinition::create('string'),
+                  ]),
+                'two' => VariantDefinition::create()
+                  ->setLabel('label'),
+              ])
+          ]),
+        'beta' => VariantDefinition::create()
+          ->setLabel('Alpha')
+          ->setProperties([
+            'beta_one' => DataDefinition::create('string')
+              ->setLabel('B1')
+              ->setRequired(TRUE),
+            'beta_two' => DataDefinition::create('string')
+              ->setLabel('B2')
+              ->setRequired(TRUE),
+          ])
+      ]);
+
+  $mutable_data = DataItemFactory::createFromDefinition($definition);
+
+  $mutable_data->type = 'alpha';
+  $mutable_data->alpha_mutable->alpha_type = 'one';
+  $mutable_data->alpha_mutable->one_a = '1';
+  $mutable_data->alpha_mutable->one_b = '2';
+  }
+
 }
