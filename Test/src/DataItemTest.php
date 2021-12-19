@@ -14,12 +14,14 @@ use MutableTypedData\Definition\DataDefinition;
 use MutableTypedData\Definition\VariantDefinition;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Tests data item behaviour.
  */
 class DataItemTest extends TestCase {
 
+  use ProphecyTrait;
   use VarDumperSetupTrait;
 
   /**
