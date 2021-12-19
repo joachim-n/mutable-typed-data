@@ -1909,6 +1909,30 @@ class DataItemTest extends TestCase {
     $this->assertEquals('foo', $mutable_data->alpha_one->value);
     $this->assertEquals('bar', $mutable_data->alpha_two->value);
 
+    // Test setting the whole of the mutable data with an array.
+    $mutable_data = DataItemFactory::createFromDefinition($definition);
+    $mutable_data->set([
+      'type' => 'alpha',
+      'alpha_one' => 'foo',
+      'alpha_two' => 'bar',
+    ]);
+    $this->assertEquals('alpha', $mutable_data->type->value);
+    $this->assertEquals('foo', $mutable_data->alpha_one->value);
+    $this->assertEquals('bar', $mutable_data->alpha_two->value);
+
+    // Test setting the whole of the mutable data with an array in the wrong
+    // order, that is, where the variant property is not the first item in the
+    // array.
+    $mutable_data = DataItemFactory::createFromDefinition($definition);
+    $mutable_data->set([
+      'alpha_one' => 'foo',
+      'type' => 'alpha',
+      'alpha_two' => 'bar',
+    ]);
+    $this->assertEquals('alpha', $mutable_data->type->value);
+    $this->assertEquals('foo', $mutable_data->alpha_one->value);
+    $this->assertEquals('bar', $mutable_data->alpha_two->value);
+
     // TODO: expand this into a data provider for all the possible crash
     // scenarios!
     $mutable_data = DataItemFactory::createFromDefinition($definition);

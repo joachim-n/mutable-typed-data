@@ -125,10 +125,18 @@ class MutableData extends ComplexData {
       ));
     }
 
-    // TODO: allow the order of the array not to matter, as currently if the
-    // $value contains the variant type but it's not first in the array,
-    // the call to the parent will fail because the properties are not yet
-    // defined.
+    // Ensure the variant property is the first in the array if present, as if
+    // it contains the variant type but it's not first in the array, the call to
+    // the parent will fail because the properties are not yet defined.
+    if (!empty($value[$this->typePropertyName]) && count($value) > 1 && array_key_first($value) != $this->typePropertyName) {
+      $first_value_array = [
+        $this->typePropertyName => $value[$this->typePropertyName],
+      ];
+      // Array union ignores later repeated keys, so the variant property in
+      // its original position is ignored in favour of the one we put at the
+      // front.
+      $value = $first_value_array + $value;
+    }
 
     if (empty($this->variant) && empty($value[$this->typePropertyName])) {
       throw new InvalidInputException(sprintf(
