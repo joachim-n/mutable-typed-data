@@ -1943,7 +1943,7 @@ class DataItemTest extends TestCase {
   }
 
   /**
-   * Data provider for testSingleComplexDataExceptions().
+   * Data provider for testSingleMutableDataExceptions().
    */
   public function providerSingleMutableDataExceptions() {
     return [
@@ -1981,9 +1981,9 @@ class DataItemTest extends TestCase {
   }
 
   /**
-   * Tests exceptions on complex data.
+   * Tests exceptions on mutable data.
    *
-   * @dataProvider providerSingleComplexDataExceptions
+   * @dataProvider providerSingleMutableDataExceptions
    */
   public function testSingleMutableDataExceptions(callable $call) {
     $definition = DataDefinition::create('mutable')
