@@ -152,7 +152,7 @@ class MutableData extends ComplexData {
     // TODO: possible bug here if the variant property's machine name is also
     // used somewhere else in the data, for instance, if a variant property is
     // complex and has a child property with the same name!!!
-    if ($data_item->getDefinition()->getName() == $this->typePropertyName) {
+    if ($data_item->getAddress() == $this->getVariantData()->getAddress()) {
       $this->setVariant($value);
     }
   }
