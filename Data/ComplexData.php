@@ -293,9 +293,10 @@ class ComplexData extends DataItem implements \IteratorAggregate {
 
     if (!array_key_exists($name, $this->properties)) {
       throw new InvalidAccessException(sprintf(
-        "Unknown property %s on data at %s.",
+        "Unknown property '%s' on data at '%s', available properties are: %s.",
         $name,
-        $this->getAddress()
+        $this->getAddress(),
+        implode(', ', $this->definition->getPropertyNames())
       ));
     }
 
