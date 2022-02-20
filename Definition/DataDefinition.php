@@ -590,7 +590,8 @@ class DataDefinition {
    * Adds a single option to the data this defines.
    *
    * @param OptionDefinition $option
-   *  A single option definition.
+   *  A single option definition. If its value is the same as an option already
+   *  present, the existing option is replaced.
    *
    * @return static
    */
