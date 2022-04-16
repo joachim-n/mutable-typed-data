@@ -759,6 +759,7 @@ class DataItemTest extends TestCase {
     // the required property.
     $violations = $complex_data->validate();
     $this->assertCount(1, $violations);
+    $this->assertArrayHasKey('data:req', $violations);
 
     $complex_data->req = 'foo';
 
@@ -788,6 +789,7 @@ class DataItemTest extends TestCase {
     // Validation now fails because the parent value exists.
     $violations = $data->validate();
     $this->assertCount(1, $violations);
+    $this->assertArrayHasKey('data:parent:req', $violations);
 
     $data->parent->req = 'foo';
 
