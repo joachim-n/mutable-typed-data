@@ -40,7 +40,7 @@ class ComplexData extends DataItem implements \IteratorAggregate {
    *
    * iterates over data!!! auto-creates!
    */
-  public function getIterator() {
+  public function getIterator(): \Traversable {
     // Iterate in the order the properties are defined in, rather than the
     // keys in the $this->value array, which are in whichever order a value
     // was set.
