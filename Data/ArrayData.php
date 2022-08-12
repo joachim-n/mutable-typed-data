@@ -51,7 +51,7 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
   /**
    * Returns the iterator for this object.
    */
-  public function getIterator() {
+  public function getIterator(): \Traversable {
     // return new \ArrayIterator($this->value);
 
     // NOT READY YET!
@@ -60,13 +60,19 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     }
   }
 
-  public function offsetExists($offset) {
+  /**
+   * {@inheritdoc}
+   */
+  public function offsetExists(mixed $offset): bool {
     $value = $this->getValue();
 
     return isset($value[$offset]);
   }
 
-  public function offsetGet($offset) {
+  /**
+   * {@inheritdoc}
+   */
+  public function offsetGet(mixed $offset): mixed {
     // Allow use of empty offset notation to append items.
     if (is_null($offset)) {
       $next_delta = $this->count();
@@ -94,7 +100,10 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     return $this->value[$offset];
   }
 
-  public function offsetSet($offset, $value) {
+  /**
+   * {@inheritdoc}
+   */
+  public function offsetSet(mixed $offset, mixed $value): void {
     $next_delta = $this->count();
 
     // If the offset is NULL, the array access was the empty index operator, and
@@ -135,7 +144,7 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
    *
    * This allows data items to be removed by using unset().
    */
-  public function offsetUnset($delta) {
+  public function offsetUnset(mixed $delta): void {
     if (!isset($this->value[$delta])) {
       throw new InvalidAccessException("Attempt to remove nonexistent delta {$delta}.");
     }
@@ -343,7 +352,7 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     return (bool) array_product($values_are_empty);
   }
 
-  public function count() {
+  public function count(): int {
     return count($this->getValue());
   }
 
