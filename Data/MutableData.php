@@ -166,7 +166,7 @@ class MutableData extends ComplexData {
   }
 
 
-  public function getIterator() {
+  public function getIterator(): \Traversable {
     if (!isset($this->value[$this->typePropertyName])) {
       $this->value[$this->typePropertyName] = $this->factoryClass::createFromDefinition($this->properties[$this->typePropertyName], $this);
     }
