@@ -3,6 +3,7 @@
 namespace MutableTypedData\Data;
 
 use MutableTypedData\Definition\DataDefinition;
+use MutableTypedData\Exception\InvalidAccessException;
 use MutableTypedData\Exception\InvalidDataAddressException;
 use MutableTypedData\Exception\InvalidDefinitionException;
 use MutableTypedData\Exception\InvalidInputException;
@@ -720,8 +721,9 @@ abstract class DataItem {
   }
 
   public function __get($name) {
-    // For a single-valued item, the only possible property is 'value'.
-    assert($name == 'value');
+    if ($name != 'value') {
+      throw new InvalidAccessException("For a single-valued item, the only possible property is 'value', attempt to get '$name'.");
+    }
 
     return $this->get();
   }
