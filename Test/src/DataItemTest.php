@@ -273,10 +273,22 @@ class DataItemTest extends TestCase {
   public function testIterators() {
     $definition = DataDefinition::create('string');
     $data = DataItemFactory::createFromDefinition($definition);
+    $data->value = 'cake';
     foreach ($data as $item) {
       // Iterating over single simple data has no effect.
       $this->fail();
     }
+
+    $definition = DataDefinition::create('string')
+      ->setMultiple(TRUE);
+    $data = DataItemFactory::createFromDefinition($definition);
+    $data[] = 'one';
+    $data[] = 'two';
+    $seen = [];
+    foreach ($data as $item) {
+      $seen[] = $item->value;
+    }
+    $this->assertEquals(['one', 'two'], $seen);
 
     $definition = DataDefinition::create('complex')
       ->setLabel('Label')
