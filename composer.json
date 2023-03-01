@@ -5,7 +5,7 @@
   "license": "GPL-2.0+",
   "require": {
     "php": "^7.0 || ^8.0",
-    "symfony/expression-language": "~3.4.0"
+    "symfony/expression-language": "^5"
   },
   "require-dev": {
     "symfony/var-dumper": "^4.2",
