@@ -264,6 +264,10 @@ abstract class DataItem {
    *
    * @internal
    *
+   * @param bool $recursion
+   *   Whether this is a recursive call or not. If called from itself, this is
+   *   TRUE; if called from elsewhere this is FALSE.
+   *
    * @return bool
    *   Whether the operation was successful:
    *    - TRUE if the default was applied successfully or a value was already
