@@ -92,7 +92,7 @@ abstract class SimpleData extends DataItem implements \IteratorAggregate {
       }
       else {
         $violations[$this->getAddress()][] = strtr('Value is required for @label.', [
-          '@label' => $this->getLabel(),
+          '@label' => $this->hasLabel()? $this->getLabel() : $this->getName(),
         ]);
       }
     }
