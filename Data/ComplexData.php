@@ -173,7 +173,7 @@ class ComplexData extends DataItem implements \IteratorAggregate {
   public function set($value) {
     if (!is_array($value)) {
       throw new InvalidInputException(sprintf(
-        "Attempt to set a non-array value on complex data at address %s. Set individual values with properties.",
+        "Attempt to set a non-array value on complex data at address '%s'. Set individual values with properties.",
         $this->getAddress()
       ));
     }
