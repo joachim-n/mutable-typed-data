@@ -501,6 +501,21 @@ class DataDefinition {
     return $this;
   }
 
+  /**
+   * Determines whether this definition has a label.
+   *
+   * Internal properties typically will not have a label, and error messages
+   * will need to check before calling getLabel().
+   *
+   * @return bool
+   *   Whether this definition has a label.
+   *
+   * @internal
+   */
+  public function hasLabel(): bool {
+    return !empty($this->label);
+  }
+
   public function getLabel() {
     if (empty($this->label)) {
       trigger_error("Property for $this->name is missing a label.", E_USER_ERROR);
