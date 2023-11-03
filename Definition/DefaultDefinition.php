@@ -18,6 +18,8 @@ class DefaultDefinition {
 
   protected $expression = '';
 
+  protected $callable;
+
   static public function create() {
     return new static();
   }
