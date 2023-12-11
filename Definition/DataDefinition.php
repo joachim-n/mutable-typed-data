@@ -271,7 +271,10 @@ class DataDefinition {
 
     if ($this->type == 'mutable') {
       if (count($properties) != 1) {
-        throw new InvalidDefinitionException("Mutable data must have only the type property.");
+        throw new InvalidDefinitionException(sprintf(
+          "Mutable data at %s must have only the type property.",
+          $this->name
+        ));
       }
 
       $variant_property = reset($properties);
@@ -381,7 +384,10 @@ class DataDefinition {
     }
 
     if ($this->type == 'mutable') {
-      throw new InvalidDefinitionException("Mutable data must have only the type property.");
+      throw new InvalidDefinitionException(sprintf(
+        "Mutable data at %s must have only the type property.",
+        $this->name
+      ));
     }
 
     if (empty($property->getName())) {
@@ -410,7 +416,10 @@ class DataDefinition {
     }
 
     if ($this->type == 'mutable') {
-      throw new InvalidDefinitionException("Mutable data must have only the type property.");
+      throw new InvalidDefinitionException(sprintf(
+        "Mutable data at %s must have only the type property.",
+        $this->name
+      ));
     }
 
     foreach ($properties as $name => $property) {
