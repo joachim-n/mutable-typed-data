@@ -21,7 +21,7 @@ class ComplexData extends DataItem implements \IteratorAggregate {
    *
    * @var array
    */
-  protected $properties;
+  protected array $properties;
 
   protected $value = [];
 

@@ -53,7 +53,7 @@ class MutableData extends ComplexData {
   ];
 
   // set once type is set.
-  protected $properties;
+  protected array $properties;
 
   public function __construct(DataDefinition $definition) {
     parent::__construct($definition);
