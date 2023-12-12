@@ -462,7 +462,7 @@ class DataDefinition {
    *
    * @return static
    */
-  public function setName($name): self {
+  public function setName(string $name): self {
     if (!empty($this->name) && $this->name != $name) {
       throw new InvalidDefinitionException("Machine name of property {$this->name} can't be changed to {$name}.");
     }
