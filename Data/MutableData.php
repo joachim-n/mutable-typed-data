@@ -59,8 +59,9 @@ class MutableData extends ComplexData {
     parent::__construct($definition);
 
     if (count($this->properties) != 1) {
-      throw new InvalidDefinitionException(sprintf("Mutable data at %s must have exactly one property.",
-        $this->getAddress()
+      throw new InvalidDefinitionException(sprintf("Mutable data at %s must have exactly one property, found %d.",
+        $this->getAddress(),
+        count($this->properties),
       ));
     }
 
