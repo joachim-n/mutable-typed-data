@@ -255,6 +255,9 @@ class DataDefinition {
 
   // TODO: change to return the def object?
   public function getVariantProperties(string $type) {
+    if (!isset($this->variants[$type])) {
+      throw new \InvalidArgumentException(sprintf("No variant type %s exists at property %s.", $type, $this->name));
+    }
     return $this->variants[$type]->getProperties();
   }
 
