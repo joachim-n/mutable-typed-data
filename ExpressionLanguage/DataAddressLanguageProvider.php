@@ -20,7 +20,7 @@ class DataAddressLanguageProvider implements ExpressionFunctionProviderInterface
   /**
    * {@inheritdoc}
    */
-  public function getFunctions() {
+  public function getFunctions(): array {
     return [
       /**
        * Gets the data value for the given address.
