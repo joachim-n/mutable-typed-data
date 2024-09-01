@@ -2191,12 +2191,12 @@ class DataItemTest extends TestCase {
           ])
       ]);
 
-  $mutable_data = DataItemFactory::createFromDefinition($definition);
+    $mutable_data = DataItemFactory::createFromDefinition($definition);
 
-  $mutable_data->type = 'alpha';
-  $mutable_data->alpha_mutable->alpha_type = 'one';
-  $mutable_data->alpha_mutable->one_a = '1';
-  $mutable_data->alpha_mutable->one_b = '2';
+    $mutable_data->type = 'alpha';
+    $mutable_data->alpha_mutable->alpha_type = 'one';
+    $mutable_data->alpha_mutable->one_a = '1';
+    $mutable_data->alpha_mutable->one_b = '2';
   }
 
 }
