@@ -2283,8 +2283,8 @@ class DataItemTest extends TestCase {
    * Tests grafting data into complex data.
    */
   public function testDataItemGraft(): void {
-    // Complex data we'll graft onto.
-    $complex_data = DataItemFactory::createFromDefinition(
+    // Host data we'll graft onto.
+    $host_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('complex')
         ->setName('data')
         ->setLabel('Label')
@@ -2292,7 +2292,7 @@ class DataItemTest extends TestCase {
           'one' => DataDefinition::create('string')
         ])
     );
-    $complex_data->one = 'Value One';
+    $host_data->one = 'Value One';
 
     // The data that is to be grafted.
     $graft_data = DataItemFactory::createFromDefinition(
@@ -2303,23 +2303,24 @@ class DataItemTest extends TestCase {
     $graft_data->value = 'Value graft';
 
     // Graft on the data.
-    $graft_data = $complex_data->graft($graft_data);
+    $graft_data = $host_data->graft($graft_data);
 
-    // $added_data = $complex_data->graft;
-    dump($complex_data->one->getDefinition());
-
-    dump($graft_data->getItem('data'));
-
+    // Check the grafted item data and definition are accessible from the
+    // new host.
+    $this->assertEquals('Value graft', $host_data->graft->value);
+    $this->assertEquals('graft', $host_data->graft->getDefinition()->getName());
     $this->assertEquals([
         "one" => "Value One",
         "graft" => "Value graft",
-    ], $complex_data->export());
-
+    ], $host_data->export());
     $seen = [];
-    foreach ($complex_data as $item) {
+    foreach ($host_data as $item) {
       $seen[] = $item->value;
     }
     $this->assertEquals(['Value One', 'Value graft'], $seen);
+
+    // Check the host data can be reached going upwards from the grafted item.
+
   }
 
 }
