@@ -244,7 +244,7 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     // Don't bubble up, as the child data getting set will do that.
   }
 
-  public function graft(DataItem $insert_data) {
+  public function graft(DataItem $insert_data): DataItem {
     $insert_name = $insert_data->getName();
     if (empty($insert_name)) {
       throw new \Exception();
@@ -255,6 +255,8 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     $this->value[$insert_name] = $insert_data;
 
     $insert_data->parent = $this;
+
+    return $this->get($insert_name);
   }
 
   /**
