@@ -2279,4 +2279,41 @@ class DataItemTest extends TestCase {
     $mutable_data->alpha_mutable->one_b = '2';
   }
 
+  /**
+   * Tests splicing data into complex data.
+   */
+  public function testDataItemSplice(): void {
+    $complex_data = DataItemFactory::createFromDefinition(
+      DataDefinition::create('complex')
+        ->setLabel('Label')
+        ->setProperties([
+          'one' => DataDefinition::create('string')
+        ])
+    );
+    $complex_data->one = 'Value One';
+
+    $splice_data = DataItemFactory::createFromDefinition(
+      DataDefinition::create('string')
+        ->setName('splice')
+        ->setLabel('Splice')
+    );
+    $splice_data->value = 'Value splice';
+
+    $complex_data->splice($splice_data);
+
+    $added_data = $complex_data->splice;
+    dump($added_data);
+
+    $this->assertEquals([
+        "one" => "Value One",
+        "splice" => "Value splice",
+    ], $complex_data->export());
+
+    $seen = [];
+    foreach ($complex_data as $item) {
+      $seen[] = $item->value;
+    }
+    $this->assertEquals(['Value One', 'Value splice'], $seen);
+  }
+
 }

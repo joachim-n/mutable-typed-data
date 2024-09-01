@@ -244,6 +244,19 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     // Don't bubble up, as the child data getting set will do that.
   }
 
+  public function splice(DataItem $insert_data) {
+    $insert_name = $insert_data->getName();
+    if (empty($insert_name)) {
+      throw new \Exception();
+    }
+
+    $this->properties[$insert_name] = $insert_data->getDefinition();
+    $this->definition->addProperty($insert_data->getDefinition());
+    $this->value[$insert_name] = $insert_data;
+
+    $insert_data->parent = $this;
+  }
+
   /**
    * Removes a value from this data.
    *
