@@ -2320,7 +2320,9 @@ class DataItemTest extends TestCase {
     $this->assertEquals(['Value One', 'Value graft'], $seen);
 
     // Check the host data can be reached going upwards from the grafted item.
-
+    $this->assertEquals('Value One', $graft_data->getItem('data:one')->value);
+    $this->assertEquals('Value One', $graft_data->getItem('..:one')->value);
+    $this->assertEquals('Value One', $graft_data->getParent()->one->value);
   }
 
 }
