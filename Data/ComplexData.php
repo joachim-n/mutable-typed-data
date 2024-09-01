@@ -255,6 +255,9 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     if (empty($insert_name)) {
       throw new \Exception();
     }
+    if (!empty($insert_data->getParent())) {
+      throw new \Exception('Attempt to graft data item which already has a parent.');
+    }
 
     $this->properties[$insert_name] = $insert_data->getDefinition();
     $this->definition->addProperty($insert_data->getDefinition());
