@@ -25,7 +25,7 @@ class DataDefinitionTest extends TestCase {
   /**
    * Data provider.
    */
-  public function providerExceptions() {
+  public static function providerExceptions() {
     return [
       'set string properties' => [
         function() {

@@ -973,7 +973,7 @@ class DataItemTest extends TestCase {
   /**
    * Data provider for testImportExportSingleItem().
    */
-  public function providerImportExportSingleItem() {
+  public static function providerImportExportSingleItem() {
     // List of the types to test: data definitions and the values that the test
     // should set on them.
     $definitions = [
@@ -1395,7 +1395,7 @@ class DataItemTest extends TestCase {
     $this->assertTrue(empty($string_data->value));
   }
 
-  public function providerSingleStringDataExceptions() {
+  public static function providerSingleStringDataExceptions() {
     return [
       'not_value' => [
         'not_value',
@@ -1555,7 +1555,7 @@ class DataItemTest extends TestCase {
   /**
    * Data provider for testMultipleStringDataExceptions().
    */
-  public function providerMultipleStringDataExceptions() {
+  public static function providerMultipleStringDataExceptions() {
     return [
       'object_access' => [
         function($string_array_data) {
@@ -1725,7 +1725,7 @@ class DataItemTest extends TestCase {
   /**
    * Data provider for testSingleComplexDataExceptions().
    */
-  public function providerSingleComplexDataExceptions() {
+  public static function providerSingleComplexDataExceptions() {
     return [
       'set_single_bad_property' => [
         function($complex_data) {
@@ -1959,7 +1959,7 @@ class DataItemTest extends TestCase {
   /**
    * Data provider for testSingleMutableDataExceptions().
    */
-  public function providerSingleMutableDataExceptions() {
+  public static function providerSingleMutableDataExceptions() {
     return [
       'set_property_before_type' => [
         function($mutable_data) {
