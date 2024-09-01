@@ -385,8 +385,9 @@ class DataDefinition {
 
     if ($this->type == 'mutable') {
       throw new InvalidDefinitionException(sprintf(
-        "Mutable data at %s must have only the type property.",
-        $this->name
+        "Mutable data at '%s' must have only the type property, attempted to add new property '%s'.",
+        $this->name,
+        $property->getName(),
       ));
     }
 
