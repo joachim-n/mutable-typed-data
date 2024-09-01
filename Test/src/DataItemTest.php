@@ -2303,7 +2303,7 @@ class DataItemTest extends TestCase {
     $graft_data->value = 'Value graft';
 
     // Graft on the data.
-    $graft_data = $host_data->graft($graft_data);
+    $host_data->graft($graft_data);
 
     // Check the grafted item data and definition are accessible from the
     // new host.
