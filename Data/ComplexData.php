@@ -244,7 +244,7 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     // Don't bubble up, as the child data getting set will do that.
   }
 
-  public function splice(DataItem $insert_data) {
+  public function graft(DataItem $insert_data) {
     $insert_name = $insert_data->getName();
     if (empty($insert_name)) {
       throw new \Exception();

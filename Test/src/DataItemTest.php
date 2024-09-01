@@ -2283,8 +2283,10 @@ class DataItemTest extends TestCase {
    * Tests splicing data into complex data.
    */
   public function testDataItemSplice(): void {
+    // Complex data we'll graft onto.
     $complex_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('complex')
+        ->setName('data')
         ->setLabel('Label')
         ->setProperties([
           'one' => DataDefinition::create('string')
@@ -2292,28 +2294,31 @@ class DataItemTest extends TestCase {
     );
     $complex_data->one = 'Value One';
 
-    $splice_data = DataItemFactory::createFromDefinition(
+    // The data that is to be grafted.
+    $graft_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('string')
-        ->setName('splice')
-        ->setLabel('Splice')
+        ->setName('graft')
+        ->setLabel('Graft')
     );
-    $splice_data->value = 'Value splice';
+    $graft_data->value = 'Value graft';
 
-    $complex_data->splice($splice_data);
+    $complex_data->graft($graft_data);
 
-    $added_data = $complex_data->splice;
-    dump($added_data);
+    $added_data = $complex_data->graft;
+    dump($complex_data->one->getDefinition());
+
+    dump($added_data->getItem('data'));
 
     $this->assertEquals([
         "one" => "Value One",
-        "splice" => "Value splice",
+        "graft" => "Value graft",
     ], $complex_data->export());
 
     $seen = [];
     foreach ($complex_data as $item) {
       $seen[] = $item->value;
     }
-    $this->assertEquals(['Value One', 'Value splice'], $seen);
+    $this->assertEquals(['Value One', 'Value graft'], $seen);
   }
 
 }
