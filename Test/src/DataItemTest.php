@@ -2280,9 +2280,9 @@ class DataItemTest extends TestCase {
   }
 
   /**
-   * Tests splicing data into complex data.
+   * Tests grafting data into complex data.
    */
-  public function testDataItemSplice(): void {
+  public function testDataItemGraft(): void {
     // Complex data we'll graft onto.
     $complex_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('complex')
@@ -2302,12 +2302,13 @@ class DataItemTest extends TestCase {
     );
     $graft_data->value = 'Value graft';
 
-    $complex_data->graft($graft_data);
+    // Graft on the data.
+    $graft_data = $complex_data->graft($graft_data);
 
-    $added_data = $complex_data->graft;
+    // $added_data = $complex_data->graft;
     dump($complex_data->one->getDefinition());
 
-    dump($added_data->getItem('data'));
+    dump($graft_data->getItem('data'));
 
     $this->assertEquals([
         "one" => "Value One",
