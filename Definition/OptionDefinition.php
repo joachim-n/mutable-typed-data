@@ -7,8 +7,6 @@ namespace MutableTypedData\Definition;
  */
 class OptionDefinition {
 
-  protected $principal = FALSE;
-
   /**
    * The value for the option.
    *
