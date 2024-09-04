@@ -238,6 +238,14 @@ abstract class DataItem {
     $this->factoryClass = $factory_class;
   }
 
+  /**
+   * Validates this data.
+   *
+   * @return array
+   *   An array of violations, keyed by addresses. Each item is a numeric array
+   *   of violations for that address. Each item of that array is a string
+   *   giving the validation message.
+   */
   public function validate(): array {
     $violations = [];
 
@@ -416,6 +424,9 @@ abstract class DataItem {
     return TRUE;
   }
 
+  /**
+   * Gets the machine name of this data.
+   */
   // argh name / machine name on definition! TODO!
   public function getName(): string {
     return $this->name;
@@ -624,10 +635,22 @@ abstract class DataItem {
     return $ref;
   }
 
+  /**
+   * Gets the definition of this data.
+   *
+   * @return \MutableTypedData\Definition\DataDefinition
+   *   The definition object.
+   */
   public function getDefinition(): DataDefinition {
     return $this->definition;
   }
 
+  /**
+   * Gets a human-readable label for this data.
+   *
+   * @return string
+   *   The label. Deltas are output as 1-based.
+   */
   public function getLabel() {
     $label = $this->definition->getLabel();
 
@@ -672,9 +695,16 @@ abstract class DataItem {
     }
   }
 
+  /**
+   * Adds a value to this data.
+   *
+   * For anything other than ArrayData, adding a value is the same as setting
+   * it, as a new value can't be appended.
+   *
+   * @param mixed $value
+   *   The value to add.
+   */
   public function add($value) {
-    // For anything other than ArrayData, adding a value is the same as setting
-    // it, as a new value can't be appended.
     $this->set($value);
   }
 
@@ -781,7 +811,7 @@ abstract class DataItem {
    *  - considers only visible data.
    *
    * @return bool
-   *   TRUE if emtpy, FALSE if not.
+   *   TRUE if empty, FALSE if not.
    *
    * TODO: needs tests.
    */

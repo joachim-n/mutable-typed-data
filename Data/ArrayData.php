@@ -24,8 +24,14 @@ use MutableTypedData\Exception\InvalidInputException;
  */
 class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \Countable {
 
+  /**
+   * {@inheritdoc}
+   */
   protected $value = [];
 
+  /**
+   * {@inheritdoc}
+   */
   public static function isSimple(): bool {
     // Doesn't really matter; nothing should call this method on this class.
     return FALSE;
@@ -44,6 +50,9 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     return $this->value;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function items(): array {
     return $this->getValue();
   }
@@ -140,9 +149,12 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
   }
 
   /**
-   * Unset an array item.
+   * Unsets an array item.
    *
    * This allows data items to be removed by using unset().
+   *
+   * @param $delta
+   *   The delta to remove.
    */
   public function offsetUnset(mixed $delta): void {
     if (!isset($this->value[$delta])) {
@@ -156,10 +168,19 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     $this->value = array_values($this->value);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function removeItem(string $property_name) {
     $this->offsetUnset($property_name);
   }
 
+  /**
+   * Determines whether a further delta item may be added.
+   *
+   * @return bool
+   *  TRUE if the item may be added; FALSE if not.
+   */
   public function mayAddItem() {
     if ($this->getCardinality() == -1 || $this->getCardinality() > $this->count()) {
       return TRUE;
@@ -289,6 +310,15 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     }
   }
 
+  /**
+   * Adds one or more values to this data.
+   *
+   * @param mixed $value
+   *   A value to add to this data.
+   *   - If the value is a scalar, then a new delta item is created for it.
+   *   - If the value is an array, then each item of the array is added as a
+   *     new delta item.
+   */
   public function add($value) {
     if (!is_array($value)) {
       $value = [$value];
@@ -319,6 +349,9 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function validate(): array {
     $violations = parent::validate();
 
@@ -352,10 +385,22 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     return (bool) array_product($values_are_empty);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function count(): int {
     return count($this->getValue());
   }
 
+  /**
+   * Determines whether the given value is a delta item of this data.
+   *
+   * @param mixed $value
+   *   The value to check for.
+   *
+   * @return bool
+   *   TRUE if the value is found; FALSE if not.
+   */
   public function hasValue($value) {
     foreach ($this->getValue() as $delta_item) {
       if ($delta_item->value == $value) {
@@ -366,6 +411,9 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     return FALSE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function __get($name) {
     throw new InvalidAccessException(sprintf("Array data cannot be accessed as an object at address '%s'; property was '%s'.",
       $this->getAddress(),
@@ -373,6 +421,9 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     ));
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function walk(callable $callback) {
     $callback($this);
 
@@ -381,6 +432,9 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function getRaw() {
     $export = [];
     foreach ($this->getValue() as $delta => $value) {
@@ -415,6 +469,9 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     return $return;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function export() {
     $export = [];
     foreach ($this->getValue() as $delta => $value) {
@@ -424,6 +481,9 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     return $export;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function restoreOnWake() {
     foreach ($this->value as $delta => $value) {
       $value->parent = $this;

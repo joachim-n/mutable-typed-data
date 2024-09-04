@@ -23,8 +23,14 @@ class ComplexData extends DataItem implements \IteratorAggregate {
    */
   protected array $properties;
 
+  /**
+   * {@inheritdoc}
+   */
   protected $value = [];
 
+  /**
+   * {@inheritdoc}
+   */
   public static function isSimple(): bool {
     return FALSE;
   }
@@ -63,7 +69,18 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     return $this->value;
   }
 
-  // Hides internals unless requested.
+  /**
+   * Gets the properties of this data.
+   *
+   * The properties returned may be different from the properties on this
+   * item's definition.
+   *
+   * Properties that are declared as internal are not returned unless
+   * static::showInternal() has previously been called.
+   *
+   * @return array
+   *  An array of PropertyDefinition objects keyed by the property name.
+   */
   public function getProperties() {
     $return = [];
 
@@ -81,7 +98,18 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     return $return;
   }
 
-  // Hides internals unless requested.
+  /**
+   * Gets the names of the properties of this data.
+   *
+   * The properties returned may be different from the properties on this
+   * item's definition.
+   *
+   * Properties that are declared as internal are not returned unless
+   * static::showInternal() has previously been called.
+   *
+   * @return string[]
+   *  A numeric array of property names.
+   */
   public function getPropertyNames() {
     $property_names = [];
 
@@ -99,6 +127,19 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     return $property_names;
   }
 
+  /**
+   * Determines whether this data has the named property.
+   *
+   * This checks the current state of the data properties, not the definition's
+   * properties.
+   *
+   * @param string $name
+   *   The property name.
+   *
+   * @return boolean
+   *   TRUE if the data has this property, whether it has a value set or not.
+   *   FALSE if the data does not have this property.
+   */
   public function hasProperty($name) {
     return isset($this->properties[$name]);
   }
@@ -203,10 +244,19 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     // Don't bubble up, as the child data getting set will do that.
   }
 
+  /**
+   * Removes a value from this data.
+   *
+   * @param string $property_name
+   *   The name of the property whose data is to be removed.
+   */
   public function removeItem(string $property_name) {
     unset($this->value[$property_name]);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function validate(): array {
     $violations = parent::validate();
 
@@ -258,6 +308,9 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     return (bool) array_product($values_are_empty);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function import($value) {
     // Always treat this as set, even if the incoming value is an empty array.
     $this->set = TRUE;
@@ -285,6 +338,9 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     return $this->get($name);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function get(string $name = '') {
     if (empty($name)) {
       throw new InvalidAccessException(sprintf(
@@ -333,7 +389,9 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     }
   }
 
-
+  /**
+   * {@inheritdoc}
+   */
   public function walk(callable $callback) {
     $callback($this);
 
@@ -342,6 +400,9 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function restoreOnWake() {
     $this->properties = $this->definition->getProperties();
 
@@ -353,7 +414,9 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     }
   }
 
-
+  /**
+   * {@inheritdoc}
+   */
   protected function getRaw() {
     $export = [];
     foreach ($this->value as $name => $value) {
@@ -363,6 +426,9 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     return $export;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function export() {
     $export = [];
     foreach ($this->value as $name => $value) {

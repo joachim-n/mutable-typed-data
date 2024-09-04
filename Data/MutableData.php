@@ -41,6 +41,9 @@ class MutableData extends ComplexData {
    */
   protected $typePropertyName;
 
+  /**
+   * {@inheritdoc}
+   */
   const SERIALIZABLE = [
     'value',
     'set',
@@ -84,6 +87,15 @@ class MutableData extends ComplexData {
     }
   }
 
+  /**
+   * Gets the current variant definition for this data.
+   *
+   * @return \MutableTypedData\Definition\VariantDefinition
+   *   The current variant definition.
+   *
+   * @throws \Exception
+   *   Throws an exception if this data does not yet have a variant set.
+   */
   public function getVariantDefinition(): VariantDefinition {
     if (empty($this->variant)) {
       throw new \Exception(sprintf(
@@ -116,6 +128,9 @@ class MutableData extends ComplexData {
     parent::__set($name, $value);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function set($value) {
     // Same work as the parent class, so it can be checked before we try
     // accessing $value as an array.
@@ -151,6 +166,9 @@ class MutableData extends ComplexData {
     parent::set($value);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function onChange(DataItem $data_item, $value) {
     // Set the type when the value is set on our type property.
     // This is the only place we need to react; we don't need to override
@@ -196,16 +214,34 @@ class MutableData extends ComplexData {
     }
   }
 
+  /**
+   * Gets the data item for the variant property of this data.
+   *
+   * @return DataItem
+   *   The data item.
+   */
   public function getVariantData(): DataItem {
     return $this->get($this->typePropertyName);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function isEmpty(): bool {
     // Allow the type property value to either be non-existent, or instantiated
     // and empty itself.
     return empty($this->value[$this->typePropertyName]) || $this->value[$this->typePropertyName]->isEmpty();
   }
 
+  /**
+   * Sets the value for the variant property on this data.
+   *
+   * @param mixed $variant_property_value
+   *   The value to set.
+   * @param boolean $skip_mapping
+   *   Whether to skip getting a variant mapping. This is only used when
+   *   restoring this data object on wake.
+   */
   protected function setVariant($variant_property_value, $skip_mapping = FALSE) {
     if (empty($variant_property_value)) {
       throw new \Exception(sprintf(

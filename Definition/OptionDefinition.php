@@ -9,10 +9,25 @@ class OptionDefinition {
 
   protected $principal = FALSE;
 
+  /**
+   * The value for the option.
+   *
+   * @var mixed
+   */
   protected $value;
 
+  /**
+   * The human-readable label for the option.
+   *
+   * @var string
+   */
   protected $label;
 
+  /**
+   * An optional human-readable description for the option.
+   *
+   * @var string
+   */
   protected $description = '';
 
   public function __construct($value, $label, $description = NULL) {
