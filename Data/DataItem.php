@@ -662,6 +662,15 @@ abstract class DataItem {
     return $label;
   }
 
+  public function getOptions(): array {
+    if ($option_set_definition = $this->definition->getOptionSetDefinition()) {
+      return $option_set_definition->getOptions($this);
+    }
+    else {
+      return $this->definition->getOptions();
+    }
+  }
+
   /**
    * Magic setter.
    *

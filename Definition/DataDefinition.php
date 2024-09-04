@@ -88,6 +88,8 @@ class DataDefinition {
    */
   protected $cardinality = 1;
 
+  protected OptionSetDefinition $optionSet;
+
   protected $options = NULL;
 
   protected $validators = [];
@@ -598,6 +600,14 @@ class DataDefinition {
     return $this->required;
   }
 
+  public function setOptionSetDefinition(OptionSetDefinition $option_set) {
+    $this->optionSet = $option_set;
+  }
+
+  public function getOptionSetDefinition(): ?OptionSetDefinition {
+    return $this->optionSet;
+  }
+
   /**
    * Sets the list of valid values for the data this defines.
    *
@@ -607,6 +617,10 @@ class DataDefinition {
    * @return static
    */
   public function setOptions(OptionDefinition ...$options): self {
+    if (isset($this->optionSet)) {
+      throw new InvalidDefinitionException("Attempt to set options on data definition that has an option set.");
+    }
+
     $this->options = [];
     foreach ($options as $option) {
       $this->options[$option->getValue()] = $option;
@@ -624,6 +638,10 @@ class DataDefinition {
    * @return static
    */
   public function addOption(OptionDefinition $option): self {
+    if (isset($this->optionSet)) {
+      throw new InvalidDefinitionException("Attempt to add an options on data definition that has an option set.");
+    }
+
     $this->options[$option->getValue()] = $option;
     return $this;
   }
@@ -642,6 +660,10 @@ class DataDefinition {
    * @return static
    */
   public function setOptionsArray(array $options_array): self {
+    if (isset($this->optionSet)) {
+      throw new InvalidDefinitionException("Attempt to set options array on data definition that has an option set.");
+    }
+
     $this->options = [];
     foreach ($options_array as $value => $label) {
       $this->addOption(OptionDefinition::create($value, $label));
@@ -650,10 +672,14 @@ class DataDefinition {
   }
 
   public function hasOptions(): bool {
-    return !empty($this->options);
+    return !empty($this->options) || !empty($this->optionSet);
   }
 
   public function getOptions(): array {
+    if (isset($this->optionSet)) {
+      throw new InvalidDefinitionException("Attempt to get options on data definition that has an option set.");
+    }
+
     return $this->options ?? [];
   }
 
