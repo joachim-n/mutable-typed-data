@@ -20,6 +20,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  *
  * This may be subclassed to customize various aspects:
  *  - To add custom data types, override $types.
+ *  - To customise the class used for multiple data, override $multipleData.
  *  - To add Expression Language functions, override
  *    $expressionLanguageProviders.
  *  - To add validators, override $validators.
@@ -41,6 +42,13 @@ class DataItemFactory {
     'complex' => ComplexData::class,
     'mutable' => MutableData::class,
   ];
+
+  /**
+   * The class to use for multiple-valued data.
+   *
+   * @var string
+   */
+  static protected $multipleData = ArrayData::class;
 
   /**
    * The names of Expression Language function provider classes to use.
@@ -175,7 +183,7 @@ class DataItemFactory {
     }
 
     if ($definition->isMultiple()) {
-      $item = new ArrayData($definition);
+      $item = new static::$multipleData($definition);
     }
     else {
       if (!isset(static::$types[$definition->getType()])) {
