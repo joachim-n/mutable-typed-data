@@ -13,6 +13,7 @@ use MutableTypedData\Definition\DataDefinition;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophet;
 
 /**
  * Tests UI interaction.
@@ -20,6 +21,10 @@ use Prophecy\Argument;
 class DataInteractionTest extends TestCase {
 
   use VarDumperSetupTrait;
+
+  protected Prophet $prophet;
+
+  protected DataDefinition $definition;
 
   /**
    * {@inheritdoc}
@@ -29,7 +34,7 @@ class DataInteractionTest extends TestCase {
 
     $this->setUpVarDumper();
 
-    $this->prophet = new \Prophecy\Prophet();
+    $this->prophet = new Prophet();
 
     $this->definition = DataDefinition::create('complex')
       ->setLabel('machine name')
@@ -264,6 +269,7 @@ class DataInteractionTest extends TestCase {
 /**
  * Basic sequential UI: mimics a command line UI.
  */
+#[\AllowDynamicProperties]
 class SequentialUI {
 
   public function __construct($io) {
