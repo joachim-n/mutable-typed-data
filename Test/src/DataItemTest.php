@@ -890,8 +890,13 @@ class DataItemTest extends TestCase {
         ->setLabel('Label')
         ->setRequired(TRUE)
     );
+
+    // Setting a valid value passes validation.
     $string_data->set('green');
     $this->assertEquals('green', $string_data->get());
+
+    $violations = $string_data->validate();
+    $this->assertCount(0, $violations);
 
     // Setting an invalid value fails validation.
     $string_data->set('cake');
