@@ -580,7 +580,14 @@ abstract class DataItem {
       // TODO: make ALL roots have a default machine name, then no condition
       // here.
       if ($ref->name) {
-        array_shift($address_pieces);
+        $first_piece = array_shift($address_pieces);
+
+        if ($ref->name != $first_piece) {
+          throw new \InvalidArgumentException(sprintf("First piece of absolute address '%s' does not match root data name '%s'.",
+            $address,
+            $ref->name,
+          ));
+        }
       }
     }
 
