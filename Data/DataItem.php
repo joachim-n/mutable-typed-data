@@ -133,7 +133,7 @@ abstract class DataItem {
   public function __construct(DataDefinition $definition)  {
     $this->definition = $definition;
 
-    // Set the root name to 'default' if the definition does not have a machine
+    // Set the root name to 'data' if the definition does not have a machine
     // name. (All non-root definitions will have a machine name.)
     $this->name = $definition->getName() ?? 'data';
   }
