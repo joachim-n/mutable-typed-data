@@ -7,7 +7,7 @@ use MutableTypedData\Exception\InvalidDefinitionException;
 /**
  * Defines a data property.
  */
-class DataDefinition {
+class DataDefinition implements PropertyListInterface {
 
   /**
    * The type of data the property holds.
@@ -263,6 +263,9 @@ class DataDefinition {
     return $this->variants[$type]->getProperties();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function setProperties(array $properties): self {
     // TODO! this won't catch child classes of SimpleData!!!
     // TODO we don't have access to the factory here. So we can't ask the
@@ -297,25 +300,22 @@ class DataDefinition {
     return $this;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getProperties() {
     return $this->properties;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getPropertyNames() {
     return array_keys($this->properties);
   }
 
   /**
-   * Gets a child property definition.
-   *
-   * @param string $name
-   *  The property name.
-   *
-   * @return static
-   *  The definition.
-   *
-   * @throws \Exception
-   *  Throws an exception if the property doesn't exit.
+   * {@inheritdoc}
    */
   public function getProperty(string $name): self {
     if (!isset($this->properties[$name])) {
@@ -378,6 +378,9 @@ class DataDefinition {
     return $property_definition;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function addProperty(self $property): self {
     // TODO! this won't catch child classes of SimpleData!!!
     if ($this->type == 'string' || $this->type == 'boolean') {
@@ -403,15 +406,7 @@ class DataDefinition {
   }
 
   /**
-   * Adds properties to this definition.
-   *
-   * @param array $properties
-   *  An array of data definitions. These are appended to existing properties.
-   *  If any keys in this array correspond to existing properties, the existing
-   *  definition is overwritten. The replacement property will be in the order
-   *  given in the $properties array, not in its original position.
-   *
-   * @return static
+   * {@inheritdoc}
    */
   public function addProperties(array $properties): self {
     if ($this->type == 'string') {
@@ -441,6 +436,9 @@ class DataDefinition {
     return $this;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function removeProperty(string $name) {
     unset($this->properties[$name]);
 
