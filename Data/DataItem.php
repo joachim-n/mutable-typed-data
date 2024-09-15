@@ -825,6 +825,23 @@ abstract class DataItem {
   abstract public function isEmpty(): bool;
 
   /**
+   * Determines whether the data has a value set.
+   *
+   * This will return TRUE if the data has been set to a value that is
+   * considered empty.
+   *
+   * This method can be used to distinguish between a data item that has been
+   * instantiated by a UI to optain its label and description, and one that has
+   * has data entered by the user.
+   *
+   * @return bool
+   *   TRUE if set, FALSE if not.
+   */
+  public function isSet(): bool {
+    return (bool) $this->set;
+  }
+
+  /**
    * Gets the value as a plain array.
    *
    * This will cause lazy defaults to be applied.
