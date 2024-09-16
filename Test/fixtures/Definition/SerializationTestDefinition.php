@@ -6,6 +6,7 @@ use MutableTypedData\Data\DataItem;
 use MutableTypedData\Definition\DefaultDefinition;
 use MutableTypedData\Definition\DefinitionProviderInterface;
 use MutableTypedData\Definition\OptionDefinition;
+use MutableTypedData\Definition\OptionsSortOrder;
 use MutableTypedData\Definition\DataDefinition;
 use MutableTypedData\Definition\VariantDefinition;
 
@@ -15,6 +16,12 @@ class SerializationTestDefinition implements DefinitionProviderInterface {
     $definition = DataDefinition::create('complex')
       ->setProperties([
         'one' => DataDefinition::create('string'),
+        'string_with_options' => DataDefinition::create('string')
+          ->setOptionsArray([
+            'option_one' => 'One',
+            'option_two' => 'Two',
+          ])
+          ->setOptionsSorting(OptionsSortOrder::Label),
         'two' => DataDefinition::create('complex')
           ->setProperties([
             'alpha' => DataDefinition::create('string'),

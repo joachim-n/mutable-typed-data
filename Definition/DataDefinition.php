@@ -92,6 +92,8 @@ class DataDefinition implements PropertyListInterface {
 
   protected $options = NULL;
 
+  protected ?OptionsSortOrder $optionsOrder = NULL;
+
   protected $validators = [];
 
   /**
@@ -698,6 +700,11 @@ class DataDefinition implements PropertyListInterface {
     return $this;
   }
 
+  public function setOptionsSorting(OptionsSortOrder $order): self {
+    $this->optionsOrder = $order;
+    return $this;
+  }
+
   public function hasOptions(): bool {
     return !empty($this->options) || !empty($this->optionSet);
   }
@@ -708,19 +715,61 @@ class DataDefinition implements PropertyListInterface {
    * These can be either the options set directly on this definition, or
    * obtained dynamically from an option set definition.
    *
+   * The options are returned sorted by option weight, and then the sort order
+   * set on this definition. If not specified, this defaults to the order in
+   * which the options were added to the definition.
+   *
    * @return \MutableTypedData\Definition\OptionDefinition[]
    *   An array of option definitions, keyed by the option values.
    */
   public function getOptions(): array {
     if ($this->optionSet) {
-      return $this->optionSet->getOptions();
+      $options = $this->optionSet->getOptions();
     }
     elseif ($this->options) {
-      return $this->options;
+      $options = $this->options;
     }
     else {
-      return [];
+      $options = [];
     }
+
+    $options_sorting = $this->getOptionsSorting() ?? OptionsSortOrder::Original;
+
+    if ($options_sorting == OptionsSortOrder::Original) {
+      // Get the order in which the items were added to the options array in the
+      // definition (or in which they're returned from the option set definition).
+      // This is an array of all option values, keyed by the option value, whose
+      // values are increasing integers.
+      $added_order = array_flip(array_keys($options));
+
+      uasort($options, function ($a, $b) use ($added_order) {
+        // Options with the same weight are sorted by the order they were added
+        // to the options array.
+        if ($a->getWeight() == $b->getWeight()) {
+          return $added_order[$a->getValue()] <=> $added_order[$b->getValue()];
+        }
+        else {
+          return $a->getWeight() <=> $b->getWeight();
+        }
+      });
+    }
+    elseif ($options_sorting == OptionsSortOrder::Label) {
+      uasort($options, function ($a, $b) {
+        // Options with the same weight are sorted by label.
+        if ($a->getWeight() == $b->getWeight()) {
+          return strcmp($a->getLabel(), $b->getLabel());
+        }
+        else {
+          return $a->getWeight() <=> $b->getWeight();
+        }
+      });
+    }
+
+    return $options;
+  }
+
+  public function getOptionsSorting(): ?OptionsSortOrder {
+    return $this->optionsOrder;
   }
 
   public function setValidators(string ...$validators): self {

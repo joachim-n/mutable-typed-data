@@ -4,6 +4,7 @@ namespace MutableTypedData\Test;
 
 use MutableTypedData\DataItemFactory;
 use MutableTypedData\Definition\DataDefinition;
+use MutableTypedData\Definition\OptionsSortOrder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -84,16 +85,16 @@ class DataDefinitionTest extends TestCase {
    */
   public function testDefineChildProperties() {
     $definition = DataDefinition::create('complex')
-    ->setLabel('Label')
-    ->setRequired(TRUE)
-    ->setProperties([
-      'alpha' => DataDefinition::create('string')
-        ->setLabel('Label')
-        ->setRequired(TRUE),
-      'beta' => DataDefinition::create('string')
-        ->setLabel('Label')
-        ->setRequired(TRUE),
-    ]);
+      ->setLabel('Label')
+      ->setRequired(TRUE)
+      ->setProperties([
+        'alpha' => DataDefinition::create('string')
+          ->setLabel('Label')
+          ->setRequired(TRUE),
+        'beta' => DataDefinition::create('string')
+          ->setLabel('Label')
+          ->setRequired(TRUE),
+      ]);
 
     $this->assertEquals(['alpha', 'beta'], array_keys($definition->getProperties()));
 
@@ -110,6 +111,36 @@ class DataDefinitionTest extends TestCase {
       ->setLabel('Label')
       ->setRequired(TRUE)
     );
+  }
+
+  /**
+   * Test sorting of options.
+   */
+  public function testOptionsOrder() {
+    $definition = DataDefinition::create('string')
+      ->setOptions(
+        \MutableTypedData\Definition\OptionDefinition::create('dull', 'Dull', weight: 10),
+        \MutableTypedData\Definition\OptionDefinition::create('normal_zulu', 'Normal Zulu'),
+        \MutableTypedData\Definition\OptionDefinition::create('normal_alpha', 'Normal Alpha'),
+        \MutableTypedData\Definition\OptionDefinition::create('important', 'Important', weight: -10),
+      );
+
+    $data = DataItemFactory::createFromDefinition($definition);
+    $this->assertEquals([
+      'important',
+      'normal_zulu',
+      'normal_alpha',
+      'dull',
+    ], array_keys($data->getOptions()));
+
+    // Change the options to be sorted by label.
+    $definition->setOptionsSorting(OptionsSortOrder::Label);
+    $this->assertEquals([
+      'important',
+      'normal_alpha',
+      'normal_zulu',
+      'dull',
+    ], array_keys($data->getOptions()));
   }
 
 }

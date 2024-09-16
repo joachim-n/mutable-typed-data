@@ -227,7 +227,7 @@ $definition = \MutableTypedData\Definition\DataDefinition::create('complex')
 ### Options
 
 Options can be defined with an array, or with objects, which allow options to
-have descriptions as well as labels:
+have descriptions and weights as well as labels:
 
 ```
 $definition = \MutableTypedData\Definition\DataDefinition::create('string')
@@ -243,9 +243,12 @@ $definition = \MutableTypedData\Definition\DataDefinition::create('string')
    ->setOptions(
       \MutableTypedData\Definition\OptionDefinition::create('green', 'Emerald', 'A lovely shade of green'),
       \MutableTypedData\Definition\OptionDefinition::create('red', 'Magenta', 'A deep red'),
-      \MutableTypedData\Definition\OptionDefinition::create('grey', 'Grey', 'Not very colourful')
+      \MutableTypedData\Definition\OptionDefinition::create('grey', 'Grey', 'Not very colourful but shows at the top', -10)
    );
 ```
+
+Higher-valued weights 'sink' to the bottom of a list of options; lower-valued
+weights are lighter and 'rise' up.
 
 ### Mutable data
 
