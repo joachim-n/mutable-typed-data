@@ -384,6 +384,10 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     // Access each child property.
     // Iterating over ourselves takes care of whether we're set to reveal
     // internal or not.
+
+    // Iterating will create each property, and so this will create a single-valued
+    // complex child.
+    // WHICH WE dont want! at least, not for MB.
     foreach ($this as $item) {
       $item->access();
     }
