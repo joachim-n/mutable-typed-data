@@ -591,6 +591,41 @@ class DataItemTest extends TestCase {
     $this->assertSame([], $complex_data->multiple_scalar_default_one_value->items(), "The multiple string default value was set.");
   }
 
+  public function testArrgh() {
+    // module
+    $definition = DataDefinition::create('complex')
+      ->setProperties([
+        // form
+        'single_complex' => DataDefinition::create('complex')
+          ->setProperties([
+            'child_single_complex' => DataDefinition::create('complex')
+              ->setProperties([
+                'alpha' => DataDefinition::create('string')
+                ->setLabel('Label')
+                ->setRequired(TRUE),
+              'beta' => DataDefinition::create('string')
+                ->setLabel('Label')
+                ->setRequired(TRUE),
+              ]),
+          ]),
+      ]);
+
+    $complex_data = DataItemFactory::createFromDefinition($definition);
+
+    $complex_data->single_complex->access();
+    dump($complex_data->export());
+
+    /**
+     * - module
+     * --
+     *
+     *
+     *
+     *
+     */
+
+  }
+
   /**
    * Test defaults with dependencies.
    *
