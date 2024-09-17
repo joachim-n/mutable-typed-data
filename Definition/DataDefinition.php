@@ -88,6 +88,8 @@ class DataDefinition {
    */
   protected $cardinality = 1;
 
+  protected ?OptionSetDefininitionInterface $optionSet = NULL;
+
   protected $options = NULL;
 
   protected $validators = [];
@@ -599,7 +601,36 @@ class DataDefinition {
   }
 
   /**
+   * Sets an option set definition.
+   *
+   * This is not compatible with adding OptionDefinition objects to this
+   * definition.
+   *
+   * Calling hasOptions() will return TRUE with an option set definition set.
+   *
+   * @param OptionSetDefininitionInterface $option_set
+   *   The option set definition.
+   *
+   * @return static
+   *
+   * @throws \MutableTypedData\Exception\InvalidDefinitionException
+   *   Throws an exception if this definition already has options set.
+   */
+  public function setOptionSetDefinition(OptionSetDefininitionInterface $option_set): static {
+    if (!empty($this->options)) {
+      throw new InvalidDefinitionException("Attempt to set an option set definition on data definition {$this->name} that already has options.");
+    }
+
+    $this->optionSet = $option_set;
+    return $this;
+  }
+
+  /**
    * Sets the list of valid values for the data this defines.
+   *
+   * This is not compatible with adding an OptionSetDefinitionInterface object
+   * to this definition. A deprecation error is triggered, and in 2.0.0 an
+   * exception will be thrown.
    *
    * @param OptionDefinition ...$options
    *  One or more option definitions.
@@ -607,6 +638,10 @@ class DataDefinition {
    * @return static
    */
   public function setOptions(OptionDefinition ...$options): self {
+    if (isset($this->optionSet)) {
+      @trigger_error("Calling setOptions() on data definition {$this->name} that has an option set definition is deprecated and will throw an exception in 2.0.0.", \E_USER_DEPRECATED);
+    }
+
     $this->options = [];
     foreach ($options as $option) {
       $this->options[$option->getValue()] = $option;
@@ -617,6 +652,10 @@ class DataDefinition {
   /**
    * Adds a single option to the data this defines.
    *
+   * This is not compatible with adding an OptionSetDefinitionInterface object
+   * to this definition. A deprecation error is triggered, and in 2.0.0 an
+   * exception will be thrown.
+   *
    * @param OptionDefinition $option
    *  A single option definition. If its value is the same as an option already
    *  present, the existing option is replaced.
@@ -624,6 +663,10 @@ class DataDefinition {
    * @return static
    */
   public function addOption(OptionDefinition $option): self {
+    if (isset($this->optionSet)) {
+      @trigger_error("Calling addOption() on data definition {$this->name} that has an option set definition is deprecated and will throw an exception in 2.0.0.", \E_USER_DEPRECATED);
+    }
+
     $this->options[$option->getValue()] = $option;
     return $this;
   }
@@ -634,6 +677,10 @@ class DataDefinition {
    * This is more convenient to call than setOptions() when the options have no
    * descriptions.
    *
+   * This is not compatible with adding an OptionSetDefinitionInterface object
+   * to this definition. A deprecation error is triggered, and in 2.0.0 an
+   * exception will be thrown.
+   *
    * @param array $options_array
    *   An array of options, where:
    *    - Array keys are the option values, that is, the data to store.
@@ -642,6 +689,10 @@ class DataDefinition {
    * @return static
    */
   public function setOptionsArray(array $options_array): self {
+    if (isset($this->optionSet)) {
+      @trigger_error("Calling setOptionsArray() on data definition {$this->name} that has an option set definition is deprecated and will throw an exception in 2.0.0.", \E_USER_DEPRECATED);
+    }
+
     $this->options = [];
     foreach ($options_array as $value => $label) {
       $this->addOption(OptionDefinition::create($value, $label));
@@ -650,11 +701,28 @@ class DataDefinition {
   }
 
   public function hasOptions(): bool {
-    return !empty($this->options);
+    return !empty($this->options) || !empty($this->optionSet);
   }
 
+  /**
+   * Gets the options for this definition.
+   *
+   * These can be either the options set directly on this definition, or
+   * obtained dynamically from an option set definition.
+   *
+   * @return \MutableTypedData\Definition\OptionDefinition[]
+   *   An array of option definitions, keyed by the option values.
+   */
   public function getOptions(): array {
-    return $this->options ?? [];
+    if ($this->optionSet) {
+      return $this->optionSet->getOptions();
+    }
+    elseif ($this->options) {
+      return $this->options;
+    }
+    else {
+      return [];
+    }
   }
 
   public function setValidators(string ...$validators): self {

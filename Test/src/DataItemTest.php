@@ -266,6 +266,50 @@ class DataItemTest extends TestCase {
   }
 
   /**
+   * Tests dynamic options.
+   */
+  public function testDynamicOptions() {
+    // Simple data.
+    \MutableTypedData\Fixtures\Definition\DynamicOptionSetDefinition::$definitions = [
+      'green' => OptionDefinition::create('green', 'Emerald'),
+      'red' => OptionDefinition::create('red', 'Magenta'),
+      'grey' => OptionDefinition::create('grey', 'Grey'),
+    ];
+
+    $definition = DataDefinition::create('string')
+      ->setLabel('Label')
+      ->setOptionSetDefinition(new \MutableTypedData\Fixtures\Definition\DynamicOptionSetDefinition());
+
+    $data = DataItemFactory::createFromDefinition($definition);
+
+    $this->assertEquals(['green', 'red', 'grey'], array_keys($data->getOptions()));
+
+    // Mutable data with a variant mapping.
+    $definition = DataDefinition::create('mutable')
+      ->setLabel('Label')
+      ->setProperties([
+        'type' => DataDefinition::create('string')
+          ->setLabel('mutable type')
+          ->setOptionSetDefinition(new \MutableTypedData\Fixtures\Definition\DynamicOptionSetDefinition()),
+      ])
+      ->setVariantMapping([
+        'green' => 'alpha',
+        'red' => 'alpha',
+        'grey' => 'beta',
+      ])
+      ->setVariants([
+        'alpha' => VariantDefinition::create()
+          ->setLabel('Alpha'),
+        'beta' => VariantDefinition::create()
+          ->setLabel('Beta'),
+      ]);
+
+    $data = DataItemFactory::createFromDefinition($definition);
+
+    $this->assertEquals(['green', 'red', 'grey'], array_keys($data->type->getOptions()));
+  }
+
+  /**
    * Tests that iterating over values works correctly.
    *
    * TODO: needs cleanup and testing items() too.
@@ -880,6 +924,7 @@ class DataItemTest extends TestCase {
    * Tests validation of options.
    */
   public function testValidationOptions() {
+    // Static options.
     $string_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('string')
         ->setOptions(
@@ -904,6 +949,36 @@ class DataItemTest extends TestCase {
 
     $violations = $string_data->validate();
     $this->assertCount(1, $violations);
+
+    // Dynamic options.
+    \MutableTypedData\Fixtures\Definition\DynamicOptionSetDefinition::$definitions = [
+      'green' => OptionDefinition::create('green', 'Emerald'),
+      'red' => OptionDefinition::create('red', 'Magenta'),
+      'grey' => OptionDefinition::create('grey', 'Grey'),
+    ];
+
+    $definition = DataDefinition::create('string')
+      ->setLabel('Label')
+      ->setOptionSetDefinition(new \MutableTypedData\Fixtures\Definition\DynamicOptionSetDefinition());
+
+    $string_data = DataItemFactory::createFromDefinition($definition);
+
+    $this->assertEquals(['green', 'red', 'grey'], array_keys($string_data->getOptions()));
+
+    // Setting a valid value passes validation.
+    $string_data->value = 'red';
+    $this->assertEquals('red', $string_data->get());
+
+    $violations = $string_data->validate();
+    $this->assertCount(0, $violations);
+
+    // Setting an invalid value fails validation.
+    $string_data->value = 'cake';
+    $this->assertEquals('cake', $string_data->get());
+
+    $violations = $string_data->validate();
+    $this->assertCount(1, $violations);
+    $this->assertStringMatchesFormat("Value '%s' is not one of the options for Label.", $violations['data'][0]);
   }
 
   /**
