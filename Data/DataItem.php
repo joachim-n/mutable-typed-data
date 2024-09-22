@@ -82,6 +82,13 @@ abstract class DataItem {
   protected $revealInternal = FALSE;
 
   /**
+   * Whether serialization is allowed or not.
+   *
+   * @var bool
+   */
+  protected bool $disableSerialization = FALSE;
+
+  /**
    * The class name of the factory that created this data.
    *
    * Storing this here allows any customizations in a custom factory class to
@@ -222,6 +229,17 @@ abstract class DataItem {
     $this->walk(function (DataItem $data) {
       $data->revealInternal = TRUE;
     });
+
+    return $this;
+  }
+
+  /**
+   * TODO!
+   *
+   * @return self
+   */
+  public function disableSerialization(): self {
+    $this->disableSerialization = TRUE;
 
     return $this;
   }
@@ -891,6 +909,10 @@ abstract class DataItem {
     // If the root element has no definition source, then we can't serialize.
     if (!isset($this->parent) && !isset($this->definitionSource)) {
       throw new \Exception("Data that does not use a callback to provide its definition may not be serialized.");
+    }
+
+    if ($this->disableSerialization) {
+      throw new \Exception("Serialization has been disabled.");
     }
 
     // TODO: replace this with __serialize() when we depend on PHP 7.4, so

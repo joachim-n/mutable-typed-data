@@ -2322,26 +2322,6 @@ class DataItemTest extends TestCase {
     $this->assertEquals('Value One', $graft_data->getItem('data:one')->value);
     $this->assertEquals('Value One', $graft_data->getItem('..:one')->value);
     $this->assertEquals('Value One', $graft_data->getParent()->one->value);
-
-    // Test that the data item object survives serialization.
-    // TODO! It doesn't!
-    // TODO: We need something in the serialised data that holds the
-    // callback for the spliced data too!
-    // Wake up then puts the definitions together again. ARGH!
-    // $host_data = \MutableTypedData\Fixtures\Factory\FactoryWithChangeCaseExpressionLanguageFunctions::createFromProvider(\MutableTypedData\Fixtures\Definition\SerializationTestDefinition::class);
-
-    // $graft_data = DataItemFactory::createFromDefinition($graft_definition);
-    // $graft_data->value = 'Value graft';
-
-    // // Graft on the data.
-    // $host_data->graft($graft_data);
-
-    // $pre_serialise_export = $host_data->export();
-    // $serialised = serialize($host_data);
-    // $host_data = unserialize($serialised);
-
-    // // Check the export value is the same as before serialization
-    // $this->assertEquals($pre_serialise_export, $host_data->export());
   }
 
 }

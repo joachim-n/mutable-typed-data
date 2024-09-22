@@ -251,6 +251,10 @@ class ComplexData extends DataItem implements \IteratorAggregate {
    *   The data to insert. This will have its parent property set.
    */
   public function graft(DataItem $insert_data) {
+    if (!$this->disableSerialization) {
+      throw new \Exception('Attempt to graft into data item which does not have serialization disabled.');
+    }
+
     $insert_name = $insert_data->getName();
     if (empty($insert_name)) {
       throw new \Exception();
