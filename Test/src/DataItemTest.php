@@ -2324,6 +2324,39 @@ class DataItemTest extends TestCase {
     $this->assertEquals('Value One', $graft_data->getItem('data:one')->value);
     $this->assertEquals('Value One', $graft_data->getItem('..:one')->value);
     $this->assertEquals('Value One', $graft_data->getParent()->one->value);
+
+
+    return;
+
+    // MTD grafting doesn't work when the host is mutable!
+
+    $mutable_host_data = DataItemFactory::createFromDefinition(
+      DataDefinition::create('mutable')
+        ->setLabel('Label')
+        ->setProperties([
+          'type' => DataDefinition::create('string')
+            ->setLabel('mutable type')
+        ])
+        ->setVariants([
+          'alpha' => VariantDefinition::create()
+            ->setLabel('Alpha')
+            ->setProperties([
+              'alpha_one' => DataDefinition::create('string')
+                ->setLabel('A1')
+                ->setRequired(TRUE),
+            ]),
+        ])
+      );
+
+    $mutable_host_data->type = 'alpha';
+
+    $graft_data = DataItemFactory::createFromDefinition($graft_definition);
+    $graft_data->value = 'Value graft';
+
+    // Graft on the data.
+    $mutable_host_data->disableSerialization();
+    $mutable_host_data->graft($graft_data);
+
   }
 
 }
