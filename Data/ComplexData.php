@@ -270,8 +270,9 @@ class ComplexData extends DataItem implements \IteratorAggregate {
       throw new InvalidDefinitionChangeException('Attempt to graft a data item which already has a parent.');
     }
 
+    // Update the property list stored in the data item, but not the data
+    // definition object.
     $this->properties[$insert_name] = $insert_data->getDefinition();
-    $this->definition->addProperty($insert_data->getDefinition());
     $this->value[$insert_name] = $insert_data;
 
     $insert_data->parent = $this;
