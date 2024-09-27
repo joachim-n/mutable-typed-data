@@ -4,6 +4,7 @@ namespace MutableTypedData\Data;
 
 use MutableTypedData\Definition\DataDefinition;
 use MutableTypedData\Exception\InvalidAccessException;
+use MutableTypedData\Exception\InvalidDefinitionChangeException;
 use MutableTypedData\Exception\InvalidDefinitionException;
 use MutableTypedData\Exception\InvalidInputException;
 
@@ -249,6 +250,8 @@ class ComplexData extends DataItem implements \IteratorAggregate {
    *
    * @param DataItem $insert_data
    *   The data to insert. This will have its parent property set.
+   *
+   * @throws \Exception|InvalidDefinitionChangeException
    */
   public function graft(DataItem $insert_data) {
     if (!$this->disableSerialization) {
@@ -257,10 +260,14 @@ class ComplexData extends DataItem implements \IteratorAggregate {
 
     $insert_name = $insert_data->getName();
     if (empty($insert_name)) {
-      throw new \Exception();
+      throw new InvalidDefinitionChangeException('Attemt to graft a data item which has no name.');
     }
     if (!empty($insert_data->getParent())) {
-      throw new \Exception('Attempt to graft data item which already has a parent.');
+      throw new InvalidDefinitionChangeException('Attempt to graft a data item which already has a parent.');
+    }
+    // Example the current properties rather than the definition.
+    if (isset($this->properties[$insert_name])) {
+      throw new InvalidDefinitionChangeException('Attempt to graft a data item which already has a parent.');
     }
 
     $this->properties[$insert_name] = $insert_data->getDefinition();
