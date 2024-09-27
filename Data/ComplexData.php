@@ -263,11 +263,17 @@ class ComplexData extends DataItem implements \IteratorAggregate {
       throw new InvalidDefinitionChangeException('Attemt to graft a data item which has no name.');
     }
     if (!empty($insert_data->getParent())) {
-      throw new InvalidDefinitionChangeException('Attempt to graft a data item which already has a parent.');
+      throw new InvalidDefinitionChangeException(sprintf("Attempt to graft data item '%s' which already has a parent.",
+        $insert_data->getAddress(),
+      ));
     }
-    // Example the current properties rather than the definition.
+    // Don't allow property overwrite.
     if (isset($this->properties[$insert_name])) {
-      throw new InvalidDefinitionChangeException('Attempt to graft a data item which already has a parent.');
+      throw new InvalidDefinitionChangeException(sprintf("Attempt to graft a data item '%s' into an existing property '%s' in data '%s'.",
+        $insert_data->getAddress(),
+        $insert_name,
+        $this->getAddress(),
+      ));
     }
 
     // Update the property list stored in the data item, but not the data
