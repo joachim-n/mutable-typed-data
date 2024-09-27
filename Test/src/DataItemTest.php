@@ -2283,7 +2283,7 @@ class DataItemTest extends TestCase {
    * Tests grafting data into complex data.
    */
   public function testDataItemGraft(): void {
-    // Host data we'll graft onto.
+    // Complex host data we'll graft onto.
     $host_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('complex')
         ->setName('data')
@@ -2325,12 +2325,8 @@ class DataItemTest extends TestCase {
     $this->assertEquals('Value One', $graft_data->getItem('..:one')->value);
     $this->assertEquals('Value One', $graft_data->getParent()->one->value);
 
-
-    return;
-
-    // MTD grafting doesn't work when the host is mutable!
-
-    $mutable_host_data = DataItemFactory::createFromDefinition(
+    // Mutable host data we'll graft onto.
+    $host_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('mutable')
         ->setLabel('Label')
         ->setProperties([
@@ -2348,15 +2344,34 @@ class DataItemTest extends TestCase {
         ])
       );
 
-    $mutable_host_data->type = 'alpha';
+    $host_data->type = 'alpha';
 
     $graft_data = DataItemFactory::createFromDefinition($graft_definition);
     $graft_data->value = 'Value graft';
 
     // Graft on the data.
-    $mutable_host_data->disableSerialization();
-    $mutable_host_data->graft($graft_data);
+    $host_data->disableSerialization();
+    $host_data->graft($graft_data);
 
+    // Check the grafted item data and definition are accessible from the
+    // new host.
+    $this->assertEquals('Value graft', $host_data->graft->value);
+    $this->assertEquals('Value graft', $host_data->getItem('data:graft')->value);
+    $this->assertEquals('graft', $host_data->graft->getDefinition()->getName());
+    $this->assertEquals([
+        "type" => "alpha",
+        "graft" => "Value graft",
+    ], $host_data->export());
+    $seen = [];
+    foreach ($host_data as $item) {
+      $seen[] = $item->value;
+    }
+    $this->assertEquals(['alpha', NULL, 'Value graft'], $seen);
+
+    // Check the host data can be reached going upwards from the grafted item.
+    $this->assertEquals('alpha', $graft_data->getItem('data:type')->value);
+    $this->assertEquals('alpha', $graft_data->getItem('..:type')->value);
+    $this->assertEquals('alpha', $graft_data->getParent()->type->value);
   }
 
 }
