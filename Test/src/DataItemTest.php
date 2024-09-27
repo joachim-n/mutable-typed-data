@@ -2308,6 +2308,7 @@ class DataItemTest extends TestCase {
     // Check the grafted item data and definition are accessible from the
     // new host.
     $this->assertEquals('Value graft', $host_data->graft->value);
+    $this->assertEquals('Value graft', $host_data->getItem('data:graft')->value);
     $this->assertEquals('graft', $host_data->graft->getDefinition()->getName());
     $this->assertEquals([
         "one" => "Value One",
