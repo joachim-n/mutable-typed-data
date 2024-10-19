@@ -293,6 +293,7 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
       $this->value = [];
 
       foreach ($value as $index => $item_value) {
+        // pointlesss, we just killed value!
         if (isset($this->value[$index])) {
           $this->value[$index]->set($item_value);
         }
