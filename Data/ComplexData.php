@@ -246,12 +246,22 @@ class ComplexData extends DataItem implements \IteratorAggregate {
   }
 
   /**
-   * Graft another data item into this data.
+   * Grafts another data item into this data.
+   *
+   * The property list in the current data is updated, but the property
+   * definition object is not.
    *
    * @param DataItem $insert_data
-   *   The data to insert. This will have its parent property set.
+   *   The data to insert. The name of the insert data will be used as the
+   *   property name in the current data where the insert data is added. The
+   *   insert data will have its parent property set to the current data.
    *
    * @throws \Exception|InvalidDefinitionChangeException
+   *   Throws an exception if:
+   *   - The current data does not have serialization disabled.
+   *   - The insert data has no name.
+   *   - The insert data has a parent.
+   *   - The insert data's name is already a property on the current data.
    */
   public function graft(DataItem $insert_data) {
     if (!$this->disableSerialization) {
