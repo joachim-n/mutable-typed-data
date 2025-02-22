@@ -181,22 +181,37 @@ class ComplexData extends DataItem implements \IteratorAggregate {
   }
 
   public function __set($name, $value) {
-    if (!array_key_exists($name, $this->properties)) {
+    $this->setPropertyValue($name, $value);
+  }
+
+  /**
+   * Sets a single property's value.
+   *
+   * Helper for magic __set().
+   *
+   * @param string $property_name
+   *   The property name.
+   * @param mixed $value
+   *   The new value for the property.
+   *
+   * @throws
+   *   Throws an InvalidAccessException if the property does not exist.
+   */
+  protected function setPropertyValue(string $property_name, mixed $value): void {
+    if (!array_key_exists($property_name, $this->properties)) {
       throw new InvalidAccessException(sprintf("Attempt to set nonexistent property '%s' at %s.",
-        $name,
+        $property_name,
         $this->getAddress()
       ));
     }
 
-    // TODO: hand over to set()!
-
-    if (!isset($this->value[$name])) {
+    if (!isset($this->value[$property_name])) {
       // yeah this works for a string, but what if it's a component????
-      $item_data = $this->factoryClass::createFromDefinition($this->properties[$name], $this);
-      $this->value[$name] = $item_data;
+      $item_data = $this->factoryClass::createFromDefinition($this->properties[$property_name], $this);
+      $this->value[$property_name] = $item_data;
     }
 
-    $this->value[$name]->set($value);
+    $this->value[$property_name]->set($value);
     $this->set = TRUE;
 
     // Don't bubble up, as the child data getting set will do that.

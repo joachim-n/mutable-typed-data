@@ -107,15 +107,18 @@ class MutableData extends ComplexData {
     return $this->definition->getVariants()[$this->variant];
   }
 
-  public function __set($name, $value) {
-    if ($name != $this->typePropertyName && empty($this->variant)) {
+  /**
+   * {@inheritdoc}
+   */
+  protected function setPropertyValue(string $property_name, mixed $value): void {
+    if ($property_name != $this->typePropertyName && empty($this->variant)) {
       throw new InvalidInputException(sprintf("Variant must be set before any other property; attempt to set %s on %s.",
-        $name,
+      $property_name,
         $this->getAddress()
       ));
     }
 
-    if ($name == $this->typePropertyName && empty($value)) {
+    if ($property_name == $this->typePropertyName && empty($value)) {
       throw new InvalidInputException(sprintf(
         "Mutable data at %s may not have its variant property '%s' set to an empty value.",
         $this->getAddress(),
@@ -125,7 +128,7 @@ class MutableData extends ComplexData {
 
     // Note that we don't need to call setVariant() here; that's done when the
     // variant property's value bubbles up in onChange().
-    parent::__set($name, $value);
+    parent::setPropertyValue($property_name, $value);
   }
 
   /**
