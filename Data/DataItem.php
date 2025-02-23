@@ -571,10 +571,15 @@ abstract class DataItem {
 
     $address_pieces = explode(':', $address);
 
+    // First figure out the starting point of the address. We don't need to
+    // handle the '..' case as a parent address piece is handled in the loop.
     if ($address_pieces[0] == '.') {
+      // If the starting point is the current item, then remove the initial '.'.
       array_shift($address_pieces);
     }
     elseif ($address_pieces[0] !== '..') {
+      // If the first piece is neither the current item or the parent, then it's
+      // an absolute address and the starting point is the root of the data.
       $ref = $this->getRoot();
 
       // TODO: make ALL roots have a default machine name, then no condition
