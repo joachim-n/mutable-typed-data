@@ -10,6 +10,7 @@ use MutableTypedData\Data\BooleanData;
 use MutableTypedData\Data\ArrayData;
 use MutableTypedData\Data\ComplexData;
 use MutableTypedData\Data\MutableData;
+use MutableTypedData\Data\ProxiedComplexData;
 use MutableTypedData\Exception\InvalidDefinitionException;
 use MutableTypedData\ExpressionLanguage\DataAddressLanguageProvider;
 use MutableTypedData\Validator\ValidatorInterface;
@@ -41,6 +42,7 @@ class DataItemFactory {
     'boolean' => BooleanData::class,
     'complex' => ComplexData::class,
     'mutable' => MutableData::class,
+    'proxied' => ProxiedComplexData::class,
   ];
 
   /**
