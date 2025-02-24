@@ -103,7 +103,20 @@ class ProxiedComplexData extends ComplexData {
     else {
       // With internals hidden, behave as single data and get from the proxied
       // property.
+
       return parent::get($this->proxiedPropertyName)->get($name);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validate(): array {
+    if (isset($this->value[$this->proxiedPropertyName])) {
+      return $this->value[$this->proxiedPropertyName]->validate();
+    }
+    else {
+      return [];
     }
   }
 
