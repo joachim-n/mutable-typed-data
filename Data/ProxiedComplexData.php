@@ -58,7 +58,6 @@ class ProxiedComplexData extends ComplexData {
    * {@inheritdoc}
    */
   protected function setPropertyValue(string $property_name, mixed $value): void {
-    dump($property_name);
     if ($property_name == 'value') {
       // We mean the proxied property, set that.
       $property_name = $this->proxiedPropertyName;
