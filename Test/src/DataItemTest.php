@@ -2283,20 +2283,20 @@ class DataItemTest extends TestCase {
    * Tests proxied data.
    */
   public function testProxiedData() {
-    $data = DataItemFactory::createFromDefinition(
-      DataDefinition::create('complex')
-        ->setName('data')
-        ->setLabel('Label')
-        ->setProperties([
-          'proxied' => DataDefinition::create('proxied')
-            ->setProperties([
-              'proxy' => DataDefinition::create('string'),
-              'hidden' => DataDefinition::create('string')
-                ->setDefault(DefaultDefinition::create()
-                  ->setExpression("get('..:proxy') ~ 'foo'")),
-            ])
-        ])
-    );
+    $definition = DataDefinition::create('complex')
+      ->setName('data')
+      ->setLabel('Label')
+      ->setProperties([
+        'proxied' => DataDefinition::create('proxied')
+          ->setProperties([
+            'proxy' => DataDefinition::create('string'),
+            'hidden' => DataDefinition::create('string')
+              ->setDefault(DefaultDefinition::create()
+                ->setExpression("get('..:proxy') ~ 'foo'")),
+          ])
+      ]);
+
+    $data = DataItemFactory::createFromDefinition($definition);
 
     // The proxied data initially behaves like its first property.
     $data->proxied = 'cake';
@@ -2308,6 +2308,23 @@ class DataItemTest extends TestCase {
     // data item.
     $this->assertEquals('cake', $data->proxied->proxy->value);
     $this->assertEquals('cakefoo', $data->proxied->hidden->value);
+
+    $data = DataItemFactory::createFromDefinition($definition);
+    $export = $data->export();
+    $this->assertEquals([], $export);
+
+    $data->proxied = 'cake';
+    $export = $data->export();
+    $this->assertEquals(['proxied' => 'cake'], $export);
+
+    $data->showInternal();
+    $export = $data->export();
+    $this->assertEquals([
+      'proxied' => [
+        'proxy' => 'cake',
+        ]
+      ], $export
+    );
   }
 
   /**
