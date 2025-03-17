@@ -120,6 +120,23 @@ class ProxiedComplexData extends ComplexData {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function export() {
+    if ($this->revealInternal) {
+      return parent::export();
+    }
+    else {
+      if (isset($this->value[$this->proxiedPropertyName])) {
+        return $this->value[$this->proxiedPropertyName]->export();
+      }
+      else {
+        return NULL;
+      }
+    }
+  }
+
   // how does import/export work?
 
 }
