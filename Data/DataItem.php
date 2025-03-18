@@ -628,9 +628,18 @@ abstract class DataItem {
         }
       }
       else {
+        // String address piece.
         if ($ref->isSimple()) {
           throw new InvalidDataAddressException(sprintf(
             "Unable to get child item '%s' from simple item with address '%s'.",
+            $child_name,
+            $ref->getAddress()
+          ));
+        }
+
+        if ($ref->isMultiple()) {
+          throw new InvalidDataAddressException(sprintf(
+            "Unable to get child item '%s' from multiple item with address '%s'.",
             $child_name,
             $ref->getAddress()
           ));
