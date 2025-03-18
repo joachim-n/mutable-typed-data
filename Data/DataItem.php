@@ -361,13 +361,17 @@ abstract class DataItem {
             ]);
           }
           catch (\Throwable $e) {
-            throw new InvalidDefinitionException(sprintf("Error with default expression '%s' at address %s, error message was: %s, file %s, line %s.",
-              $expression,
-              $this->getAddress(),
-              $e->getMessage(),
-              $e->getFile(),
-              $e->getLine()
-            ));
+            throw new InvalidDefinitionException(
+              sprintf(
+                "Error with default expression '%s' at address %s, error message was: %s, file %s, line %s.",
+                $expression,
+                $this->getAddress(),
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
+              ),
+              previous: $e,
+            );
           }
 
           break;
