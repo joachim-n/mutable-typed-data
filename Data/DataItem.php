@@ -563,8 +563,11 @@ abstract class DataItem {
    * @return static
    *   The data item.
    *
-   * @throw \Exception
-   *   Throws an exception if the address is invalid.
+   * @throws \InvalidArgumentException
+   *   Throws an InvalidArgumentException exception if the address is absolute
+   *   and its root does not match the data root name,
+   * @throws \MutableTypedData\Exception\InvalidDataAddressException
+   *   Throws an InvalidArgumentException exception if the address is invalid.
    */
   public function getItem(string $address): self {
     $ref = $this;
