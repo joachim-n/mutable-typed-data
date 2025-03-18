@@ -2,6 +2,7 @@
 
 namespace MutableTypedData\ExpressionLanguage;
 
+use MutableTypedData\Exception\InvalidDataAddressException;
 use MutableTypedData\Exception\InvalidDefinitionException;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
@@ -34,8 +35,12 @@ class DataAddressLanguageProvider implements ExpressionFunctionProviderInterface
         function ($arguments, $address) {
           $item = $arguments['item'];
 
-          // TODO: catch invalid addresses here.
-          $target_item = $item->getItem($address);
+          try {
+            $target_item = $item->getItem($address);
+          }
+          catch (InvalidDataAddressException $e) {
+            throw new InvalidDefinitionException("Expression uses a get() with invalid address '$address.", 0, $e);
+          }
 
           // Check for self-reference, as that produces a confusing PHP error
           // for accessing DataItem->value (presumably because we're already
