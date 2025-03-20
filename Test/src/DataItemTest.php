@@ -2336,4 +2336,99 @@ class DataItemTest extends TestCase {
     $mutable_data->alpha_mutable->one_b = '2';
   }
 
+  /**
+   * Tests grafting data into complex data.
+   */
+  public function testDataItemGraft(): void {
+    // Complex host data we'll graft onto.
+    $host_data = DataItemFactory::createFromDefinition(
+      DataDefinition::create('complex')
+        ->setName('data')
+        ->setLabel('Label')
+        ->setProperties([
+          'one' => DataDefinition::create('string')
+        ])
+    );
+    $host_data->one = 'Value One';
+
+    // The data that is to be grafted.
+    $graft_definition = DataDefinition::create('string')
+      ->setName('graft')
+      ->setLabel('Graft');
+    $graft_data = DataItemFactory::createFromDefinition($graft_definition);
+    $graft_data->value = 'Value graft';
+
+    // Graft on the data.
+    $host_data->disableSerialization();
+    $host_data->graft($graft_data);
+
+    // Check the grafted item data and definition are accessible from the
+    // new host.
+    $this->assertEquals('Value graft', $host_data->graft->value);
+    $this->assertEquals('Value graft', $host_data->getItem('data:graft')->value);
+    $this->assertEquals('graft', $host_data->graft->getDefinition()->getName());
+    $this->assertEquals([
+        "one" => "Value One",
+        "graft" => "Value graft",
+    ], $host_data->export());
+    $seen = [];
+    foreach ($host_data as $item) {
+      $seen[] = $item->value;
+    }
+    $this->assertEquals(['Value One', 'Value graft'], $seen);
+
+    // Check the host data can be reached going upwards from the grafted item.
+    $this->assertEquals('Value One', $graft_data->getItem('data:one')->value);
+    $this->assertEquals('Value One', $graft_data->getItem('..:one')->value);
+    $this->assertEquals('Value One', $graft_data->getParent()->one->value);
+
+    // Mutable host data we'll graft onto.
+    $host_data = DataItemFactory::createFromDefinition(
+      DataDefinition::create('mutable')
+        ->setLabel('Label')
+        ->setProperties([
+          'type' => DataDefinition::create('string')
+            ->setLabel('mutable type')
+        ])
+        ->setVariants([
+          'alpha' => VariantDefinition::create()
+            ->setLabel('Alpha')
+            ->setProperties([
+              'alpha_one' => DataDefinition::create('string')
+                ->setLabel('A1')
+                ->setRequired(TRUE),
+            ]),
+        ])
+      );
+
+    $host_data->type = 'alpha';
+
+    $graft_data = DataItemFactory::createFromDefinition($graft_definition);
+    $graft_data->value = 'Value graft';
+
+    // Graft on the data.
+    $host_data->disableSerialization();
+    $host_data->graft($graft_data);
+
+    // Check the grafted item data and definition are accessible from the
+    // new host.
+    $this->assertEquals('Value graft', $host_data->graft->value);
+    $this->assertEquals('Value graft', $host_data->getItem('data:graft')->value);
+    $this->assertEquals('graft', $host_data->graft->getDefinition()->getName());
+    $this->assertEquals([
+        "type" => "alpha",
+        "graft" => "Value graft",
+    ], $host_data->export());
+    $seen = [];
+    foreach ($host_data as $item) {
+      $seen[] = $item->value;
+    }
+    $this->assertEquals(['alpha', NULL, 'Value graft'], $seen);
+
+    // Check the host data can be reached going upwards from the grafted item.
+    $this->assertEquals('alpha', $graft_data->getItem('data:type')->value);
+    $this->assertEquals('alpha', $graft_data->getItem('..:type')->value);
+    $this->assertEquals('alpha', $graft_data->getParent()->type->value);
+  }
+
 }

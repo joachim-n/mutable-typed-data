@@ -4,6 +4,7 @@ namespace MutableTypedData\Data;
 
 use MutableTypedData\Definition\DataDefinition;
 use MutableTypedData\Exception\InvalidAccessException;
+use MutableTypedData\Exception\InvalidDefinitionChangeException;
 use MutableTypedData\Exception\InvalidDefinitionException;
 use MutableTypedData\Exception\InvalidInputException;
 
@@ -257,6 +258,55 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     $this->set = TRUE;
 
     // Don't bubble up, as the child data getting set will do that.
+  }
+
+  /**
+   * Grafts another data item into this data.
+   *
+   * The property list in the current data is updated, but the property
+   * definition object is not.
+   *
+   * @param DataItem $insert_data
+   *   The data to insert. The name of the insert data will be used as the
+   *   property name in the current data where the insert data is added. The
+   *   insert data will have its parent property set to the current data.
+   *
+   * @throws \Exception|InvalidDefinitionChangeException
+   *   Throws an exception if:
+   *   - The current data does not have serialization disabled.
+   *   - The insert data has no name.
+   *   - The insert data has a parent.
+   *   - The insert data's name is already a property on the current data.
+   */
+  public function graft(DataItem $insert_data) {
+    if (!$this->disableSerialization) {
+      throw new \Exception('Attempt to graft into data item which does not have serialization disabled.');
+    }
+
+    $insert_name = $insert_data->getName();
+    if (empty($insert_name)) {
+      throw new InvalidDefinitionChangeException('Attemt to graft a data item which has no name.');
+    }
+    if (!empty($insert_data->getParent())) {
+      throw new InvalidDefinitionChangeException(sprintf("Attempt to graft data item '%s' which already has a parent.",
+        $insert_data->getAddress(),
+      ));
+    }
+    // Don't allow property overwrite.
+    if (isset($this->properties[$insert_name])) {
+      throw new InvalidDefinitionChangeException(sprintf("Attempt to graft a data item '%s' into an existing property '%s' in data '%s'.",
+        $insert_data->getAddress(),
+        $insert_name,
+        $this->getAddress(),
+      ));
+    }
+
+    // Update the property list stored in the data item, but not the data
+    // definition object.
+    $this->properties[$insert_name] = $insert_data->getDefinition();
+    $this->value[$insert_name] = $insert_data;
+
+    $insert_data->parent = $this;
   }
 
   /**
