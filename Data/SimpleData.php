@@ -83,8 +83,10 @@ abstract class SimpleData extends DataItem implements \IteratorAggregate {
   /**
    * {@inheritdoc}
    */
-  public function validate(): array {
-    $violations = parent::validate();
+  public function validate(/* ?bool $include_internal = FALSE */): array {
+    $include_internal = func_get_args()[0] ?? FALSE;
+
+    $violations = parent::validate($include_internal);
 
     if ($this->isEmpty() && $this->definition->isRequired()) {
       if ($this->definition->getDefault()) {

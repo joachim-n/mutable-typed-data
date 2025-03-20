@@ -798,6 +798,9 @@ class DataItemTest extends TestCase {
     $violations = $complex_data->validate();
     $this->assertCount(0, $violations, 'Validation passes when internal not validated');
 
+    $violations = $complex_data->validate(TRUE);
+    $this->assertCount(1, $violations, 'Validation fails when internal is validated');
+
     $complex_data->showInternal();
     $violations = $complex_data->validate();
     $this->assertCount(1, $violations, 'Validation fails when internal has been revealed');
@@ -821,6 +824,9 @@ class DataItemTest extends TestCase {
 
     $violations = $complex_data->validate();
     $this->assertCount(0, $violations, 'Validation passes when internal not validated');
+
+    $violations = $complex_data->validate(TRUE);
+    $this->assertCount(1, $violations, 'Validation fails when internal is validated');
 
     $complex_data->showInternal();
     $violations = $complex_data->validate();

@@ -1,0 +1,2 @@
+# See https://github.com/joachim-n/mutable-typed-data/issues/7
+%The ".+::validate\(\)" method will require a new "\?bool \$include_internal" argument in the next major version of its parent class.+%

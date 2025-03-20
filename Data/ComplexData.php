@@ -272,14 +272,17 @@ class ComplexData extends DataItem implements \IteratorAggregate {
   /**
    * {@inheritdoc}
    */
-  public function validate(): array {
-    $violations = parent::validate();
+  public function validate(/* ?bool $include_internal = FALSE */): array {
+    $include_internal = func_get_args()[0] ?? FALSE;
+
+    $violations = parent::validate($include_internal);
 
     // Check properties, and ensure that those which are required are
     // instantiated so they can be validated.
     foreach ($this->properties as $name => $definition) {
-      // Don't validate internals unless they are revealed.
-      if (!$this->revealInternal) {
+      // Don't validate internals unless they are revealed or $include_internal
+      // is TRUE.
+      if (!$this->revealInternal && !$include_internal) {
         if ($definition->isInternal()) {
           continue;
         }
@@ -302,8 +305,9 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     // dsm($this->value);
 
     foreach ($this->value as $key => $item) {
-      // Don't validate internals unless they are revealed.
-      if (!$this->revealInternal) {
+      // Don't validate internals unless they are revealed or $include_internal
+      // is TRUE.
+      if (!$this->revealInternal && !$include_internal) {
         if ($item->isInternal()) {
           continue;
         }

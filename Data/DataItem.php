@@ -241,12 +241,26 @@ abstract class DataItem {
   /**
    * Validates this data.
    *
+   * Internal properties are not validated by default, until they are revealed.
+   * UIs should not validate internal properties, as the user can't do anything
+   * about fixing an invalid value, but code that sets data may wish to check
+   * values are valid for DX.
+   *
+   * @todo Uncomment new method parameters before 2.0.0.
+   * @see https://github.com/joachim-n/mutable-typed-data/issues/7
+   *
+   * @param ?bool $include_internal
+   *   (optional) Boolean indicating whether to validate internal properties.
+   *   Defaults to FALSE.
+   *
    * @return array
    *   An array of violations, keyed by addresses. Each item is a numeric array
    *   of violations for that address. Each item of that array is a string
    *   giving the validation message.
    */
-  public function validate(): array {
+  public function validate(/* ?bool $include_internal = FALSE */): array {
+    $include_internal = func_get_args()[0] ?? FALSE;
+
     $violations = [];
 
     // Check all validators set on the data.
