@@ -301,7 +301,14 @@ class ComplexData extends DataItem implements \IteratorAggregate {
     }
     // dsm($this->value);
 
-    foreach ($this->value as $item) {
+    foreach ($this->value as $key => $item) {
+      // Don't validate internals unless they are revealed.
+      if (!$this->revealInternal) {
+        if ($item->isInternal()) {
+          continue;
+        }
+      }
+
       $violations = array_merge($violations, $item->validate());
     }
 

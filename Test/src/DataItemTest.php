@@ -777,6 +777,57 @@ class DataItemTest extends TestCase {
   }
 
   /**
+   * Tests validation (or not) of internal data.
+   */
+  public function testValidateInternal(): void {
+    // Test with a required internal property.
+    $definition = DataDefinition::create('complex')
+      ->setProperties([
+        'public' => DataDefinition::create('string')
+          ->setLabel('Is Required')
+          ->setRequired(TRUE),
+        'internal' => DataDefinition::create('string')
+          ->setLabel('Is Required')
+          ->setInternal(TRUE)
+          ->setRequired(TRUE),
+      ]);
+
+    $complex_data = DataItemFactory::createFromDefinition($definition);
+    $complex_data->public = 'set';
+
+    $violations = $complex_data->validate();
+    $this->assertCount(0, $violations, 'Validation passes when internal not validated');
+
+    $complex_data->showInternal();
+    $violations = $complex_data->validate();
+    $this->assertCount(1, $violations, 'Validation fails when internal has been revealed');
+
+    // Test with a validator.
+    $definition = DataDefinition::create('complex')
+      ->setProperties([
+        'public' => DataDefinition::create('string')
+          ->setLabel('Is Required')
+          ->setValidators('colour'),
+        'internal' => DataDefinition::create('string')
+          ->setLabel('Is Required')
+          ->setInternal(TRUE)
+          ->setValidators('colour'),
+        ]);
+
+    $factory_class = \MutableTypedData\Fixtures\Factory\FactoryWithValidators::class;
+    $complex_data = $factory_class::createFromDefinition($definition);
+    $complex_data->public = 'red';
+    $complex_data->internal = 'potato';
+
+    $violations = $complex_data->validate();
+    $this->assertCount(0, $violations, 'Validation passes when internal not validated');
+
+    $complex_data->showInternal();
+    $violations = $complex_data->validate();
+    $this->assertCount(1, $violations, 'Validation fails when internal has been revealed');
+  }
+
+  /**
    * Tests validation of required data.
    */
   public function testValidationRequired() {
