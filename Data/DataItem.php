@@ -462,6 +462,12 @@ abstract class DataItem {
       }
     }
 
+    // Reset the static properties at the end of a non-recursive call.
+    if (!$recursion) {
+      DataItem::$seenDefaultDpendencies = [];
+      DataItem::$startingDefaultAddress = NULL;
+    }
+
     return TRUE;
   }
 
