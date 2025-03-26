@@ -757,7 +757,7 @@ class DataDefinition implements PropertyListInterface {
       uasort($options, function ($a, $b) {
         // Options with the same weight are sorted by label.
         if ($a->getWeight() == $b->getWeight()) {
-          return strcmp($a->getLabel(), $b->getLabel());
+          return strcasecmp($a->getLabel(), $b->getLabel());
         }
         else {
           return $a->getWeight() <=> $b->getWeight();
