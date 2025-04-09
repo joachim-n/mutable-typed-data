@@ -54,6 +54,8 @@ class VariantDefinition implements PropertyListInterface {
    */
   public function addProperty(DataDefinition $property): self {
     $this->properties[$property->getName()] = $property;
+
+    return $this;
   }
 
   /**
