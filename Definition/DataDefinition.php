@@ -417,7 +417,7 @@ class DataDefinition implements PropertyListInterface {
 
     if ($this->type == 'mutable') {
       throw new InvalidDefinitionException(sprintf(
-        "Mutable data at %s must have only the type property.",
+        "Mutable data at %s can't have addProperties() called on it as it must have only the type property.",
         $this->name
       ));
     }
