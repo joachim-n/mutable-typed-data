@@ -164,8 +164,7 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     unset($this->value[$delta]);
 
     // Re-key the remaining values.
-    // TODO: the deltas AND names need to be updated!
-    $this->value = array_values($this->value);
+    $this->reflowItemDeltas();
   }
 
   /**
@@ -209,6 +208,21 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     // array.
     array_splice($this->value, $delta, 0, [$new_item]);
 
+    $this->reflowItemDeltas();
+
+    return $new_item;
+  }
+
+  /**
+   * Updates the deltas of the items to be sequential.
+   *
+   * This should be called after adding or removing items before the end of the
+   * item list.
+   */
+  protected function reflowItemDeltas(): void {
+    // Reindex the value array.
+    $this->value = array_values($this->value);
+
     // Re-set the deltas of the items.
     // Using the fact that we're in a DataItem here, so we can access the
     // protected property of other objects of the same class...
@@ -216,8 +230,6 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
       $item->delta = $delta;
       $item->name = $delta;
     }
-
-    return $new_item;
   }
 
   /**

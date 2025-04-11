@@ -1098,8 +1098,15 @@ class DataItemTest extends TestCase {
     $array_data = DataItemFactory::createFromDefinition($definition);
     $this->assertEmpty($array_data->export());
 
-    $array_data[] = 'foo';
+    $array_data[] = 'one';
+    $array_data[] = 'two';
     $this->assertNotEmpty($array_data->export());
+
+    $array_data[0]->unset();
+    $this->assertNotEmpty($array_data->export());
+    $this->assertCount(1, $array_data);
+    $this->assertEquals('two', $array_data[0]->value);
+    $this->assertEquals(0, $array_data[0]->getName());
 
     $array_data[0]->unset();
     $this->assertEmpty($array_data->export());
