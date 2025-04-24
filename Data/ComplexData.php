@@ -430,7 +430,7 @@ class ComplexData extends DataItem implements \IteratorAggregate {
         "Unknown property '%s' on data at '%s', available properties are: %s.",
         $name,
         $this->getAddress(),
-        implode(', ', $this->definition->getPropertyNames())
+        implode(', ', array_keys($this->properties))
       ));
     }
 
