@@ -2013,6 +2013,9 @@ class DataItemTest extends TestCase {
             'alpha_two' => DataDefinition::create('string')
               ->setLabel('A2')
               ->setRequired(TRUE),
+            'common_three' => DataDefinition::create('string')
+              ->setLabel('C3')
+              ->setLiteralDefault('A3'),
           ]),
         'beta' => VariantDefinition::create()
           ->setLabel('Beta')
@@ -2023,6 +2026,9 @@ class DataItemTest extends TestCase {
             'beta_two' => DataDefinition::create('string')
               ->setLabel('B2')
               ->setRequired(TRUE),
+            'common_three' => DataDefinition::create('string')
+              ->setLabel('C3')
+              ->setLiteralDefault('B3'),
           ]),
       ]);
 
@@ -2092,6 +2098,15 @@ class DataItemTest extends TestCase {
     $this->assertEquals('alpha', $mutable_data->type->value);
     $this->assertEquals('foo', $mutable_data->alpha_one->value);
     $this->assertEquals('bar', $mutable_data->alpha_two->value);
+
+    // Test defaults on a common property.
+    $mutable_data = DataItemFactory::createFromDefinition($definition);
+    $mutable_data->type = 'alpha';
+    $this->assertEquals('A3', $mutable_data->common_three->value);
+
+    $mutable_data = DataItemFactory::createFromDefinition($definition);
+    $mutable_data->type = 'beta';
+    $this->assertEquals('B3', $mutable_data->common_three->value);
 
     // TODO: expand this into a data provider for all the possible crash
     // scenarios!
