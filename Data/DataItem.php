@@ -917,6 +917,8 @@ abstract class DataItem {
   /**
    * Walks the whole data, applying a callback to each data item.
    *
+   * This is only applied to actual values, not to defaults on empty values.
+   *
    * @param callable $callback
    *   The callable to apply.
    */
