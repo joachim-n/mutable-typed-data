@@ -693,10 +693,11 @@ abstract class DataItem {
           $ref = $ref->get($child_name);
         }
         else {
-          throw new InvalidDataAddressException(sprintf("Unable to get child item '%s' from item with address '%s' in request for item '%s'.",
+          throw new InvalidDataAddressException(sprintf("Unable to get child item '%s' from item with address '%s' in request for item '%s'. Available properties are: %s.",
             $child_name,
             $ref->getAddress(),
-            $address
+            $address,
+            implode(', ', $ref->getPropertyNames()),
           ));
         }
       }
