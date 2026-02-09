@@ -160,7 +160,7 @@ abstract class DataItem {
    *   (optional) The delta this item has within the parent, if the parent is
    *   multiple-valued.
    */
-  public function setParent(self $parent, int $delta = NULL) {
+  public function setParent(self $parent, ?int $delta = NULL) {
     $this->parent = $parent;
 
     if (is_int($delta)) {

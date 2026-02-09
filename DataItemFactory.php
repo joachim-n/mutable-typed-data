@@ -159,7 +159,7 @@ class DataItemFactory {
    * @return \MutableTypedData\Data\DataItem
    *   The new data item.
    */
-  public static function createFromDefinition(DataDefinition $definition, DataItem $parent = NULL, int $delta = NULL): DataItem {
+  public static function createFromDefinition(DataDefinition $definition, ?DataItem $parent = NULL, ?int $delta = NULL): DataItem {
     // Ensure a machine name.
     if ($parent) {
       $machine_name = $definition->getName();

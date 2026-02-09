@@ -62,7 +62,7 @@ class OptionDefinition {
    *
    * @return static
    */
-  public static function create($value, string $label, string $description = NULL, int $weight = 0): self {
+  public static function create($value, string $label, ?string $description = NULL, int $weight = 0): self {
     return new static($value, $label, $description, $weight);
   }
 
