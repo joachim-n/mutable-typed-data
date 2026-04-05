@@ -805,10 +805,23 @@ class DataDefinition implements PropertyListInterface {
     return $this;
   }
 
+  /**
+   * Determines whether this definition uses a mapping provider.
+   *
+   * @return bool
+   *   TRUE if the definition uses a mapping provider, FALSE otherwise.
+   */
   public function hasVariantMapping(): bool {
     return !is_null($this->variantMapping);
   }
 
+  /**
+   * Gets the variant mapping array.
+   *
+   * @return array|null
+   *   An array in the same format as accepted by static::setVariantMapping(),
+   *   or NULL if this definition does not have a variant mapping.
+   */
   public function getVariantMapping(): ?array {
     return $this->variantMapping;
   }
