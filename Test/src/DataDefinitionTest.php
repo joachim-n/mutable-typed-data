@@ -69,11 +69,11 @@ class DataDefinitionTest extends TestCase {
   /**
    * Tests various scenarios with DataDefinition that throw an exception.
    *
-   * @dataProvider providerExceptions
    *
    * @param callable $call
    *   The code to call that results in an exception.
    */
+  #[\PHPUnit\Framework\Attributes\DataProvider('providerExceptions')]
   public function testExceptions(callable $call) {
     $this->expectException(\Exception::class);
 

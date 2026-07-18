@@ -469,9 +469,8 @@ class DataItemTest extends TestCase {
 
   /**
    * Test default values.
-   *
-   * @group defaults
    */
+  #[\PHPUnit\Framework\Attributes\Group('defaults')]
   public function testDefaults() {
     $definition = DataDefinition::create('complex')
       ->setName('complex_data')
@@ -593,9 +592,8 @@ class DataItemTest extends TestCase {
 
   /**
    * Test defaults with dependencies.
-   *
-   * @group defaults
    */
+  #[\PHPUnit\Framework\Attributes\Group('defaults')]
   public function testDefaultDependencies() {
     $definition = DataDefinition::create('complex')
       ->setProperties([
@@ -635,9 +633,8 @@ class DataItemTest extends TestCase {
 
   /**
    * Tests an exception is thrown for circular default dependencies.
-   *
-   * @group defaults
    */
+  #[\PHPUnit\Framework\Attributes\Group('defaults')]
   public function testCircularDefaultDependencies() {
     $definition = DataDefinition::create('complex')
       ->setProperties([
@@ -674,9 +671,8 @@ class DataItemTest extends TestCase {
 
   /**
    * Tests setting values when there is a default.
-   *
-   * @group defaults
    */
+  #[\PHPUnit\Framework\Attributes\Group('defaults')]
   public function testOverridingDefaults() {
     $definition = DataDefinition::create('complex')
       ->setProperties([
@@ -1197,7 +1193,6 @@ class DataItemTest extends TestCase {
   /**
    * Tests import and export of data as arrays.
    *
-   * @dataProvider providerImportExportSingleItem
    *
    * @param \MutableTypedData\Definition\DataDefinition $definition
    *   The data definition.
@@ -1206,6 +1201,7 @@ class DataItemTest extends TestCase {
    * @param mixed $value_after_import
    *   The value to set on the data, which should then match the export.
    */
+  #[\PHPUnit\Framework\Attributes\DataProvider('providerImportExportSingleItem')]
   public function testImportExportSingleItem(DataDefinition $definition, $value_initial_export, $value_after_import) {
     // dump($definition);
     $data = DataItemFactory::createFromDefinition($definition);
@@ -1559,9 +1555,8 @@ class DataItemTest extends TestCase {
 
   /**
    * Tests exceptions.
-   *
-   * @dataProvider providerSingleStringDataExceptions
    */
+  #[\PHPUnit\Framework\Attributes\DataProvider('providerSingleStringDataExceptions')]
   public function testSingleStringDataExceptions($property, $value, $exception_class = \MutableTypedData\Exception\InvalidInputException::class) {
     $string_data = DataItemFactory::createFromDefinition(
       DataDefinition::create('string')
@@ -1775,9 +1770,8 @@ class DataItemTest extends TestCase {
    * Tests exceptions on multiple string data.
    *
    * This covers general cases for array data.
-   *
-   * @dataProvider providerMultipleStringDataExceptions
    */
+  #[\PHPUnit\Framework\Attributes\DataProvider('providerMultipleStringDataExceptions')]
   public function testMultipleStringDataExceptions(callable $call) {
     $definition = DataDefinition::create('string')
       ->setMultiple(TRUE)
@@ -1896,9 +1890,8 @@ class DataItemTest extends TestCase {
 
   /**
    * Tests exceptions on complex data.
-   *
-   * @dataProvider providerSingleComplexDataExceptions
    */
+  #[\PHPUnit\Framework\Attributes\DataProvider('providerSingleComplexDataExceptions')]
   public function testSingleComplexDataExceptions(callable $call) {
     $definition = DataDefinition::create('complex')
       ->setLabel('Label')
@@ -2155,9 +2148,8 @@ class DataItemTest extends TestCase {
 
   /**
    * Tests exceptions on mutable data.
-   *
-   * @dataProvider providerSingleMutableDataExceptions
    */
+  #[\PHPUnit\Framework\Attributes\DataProvider('providerSingleMutableDataExceptions')]
   public function testSingleMutableDataExceptions(callable $call) {
     $definition = DataDefinition::create('mutable')
       ->setLabel('my label')
