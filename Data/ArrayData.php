@@ -472,7 +472,9 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
     $delta_item_class = $this->factoryClass::getTypeClass($this->definition->getType());
 
     if (!$delta_item_class::isSimple()) {
-      throw new InvalidAccessException("Only simple data can only have values() called on an array.");
+      throw new InvalidAccessException(sprintf("Attempt to call values() on array data with compound items at address '%s'. Only simple data can have values() called on an array.",
+        $this->getAddress(),
+      ));
     }
 
     $return = [];
