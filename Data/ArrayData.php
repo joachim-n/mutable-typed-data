@@ -305,13 +305,8 @@ class ArrayData extends DataItem implements \IteratorAggregate, \ArrayAccess, \C
       $this->value = [];
 
       foreach ($value as $index => $item_value) {
-        if (isset($this->value[$index])) {
-          $this->value[$index]->set($item_value);
-        }
-        else {
-          $item_data = $this->createItem();
-          $item_data->set($item_value);
-        }
+        $item_data = $this->createItem();
+        $item_data->set($item_value);
       }
       $this->set = TRUE;
     }
