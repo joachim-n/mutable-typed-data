@@ -16,7 +16,7 @@ namespace MutableTypedData\Definition;
  * When a mutable data item's variant controlling property is set, the variant's
  * properties are added to the mutable data.
  */
-class VariantDefinition implements PropertyListInterface {
+class VariantDefinition implements PropertyListInterface, VariantInterface {
 
   protected $label;
 
