@@ -66,6 +66,8 @@ class DataDefinition implements PropertyListInterface {
 
   protected $variants = [];
 
+  protected $partials = [];
+
   protected $variantMapping = NULL;
 
   protected $isVariantProperty = FALSE;
