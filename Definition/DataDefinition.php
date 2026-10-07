@@ -772,11 +772,26 @@ class DataDefinition implements PropertyListInterface {
     return $this->optionsOrder;
   }
 
+  /**
+   * Sets the validators on this data.
+   *
+   * @param string ...$validators
+   *   One or more validator names. All validators must pass for the data to be
+   *   valid.
+   *
+   * @return self
+   */
   public function setValidators(string ...$validators): self {
     $this->validators = $validators;
     return $this;
   }
 
+  /**
+   * Gets the names of the validators for this data.
+   *
+   * @return array
+   *   An array of validator names.
+   */
   public function getValidators(): array {
     return $this->validators;
   }
