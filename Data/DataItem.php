@@ -828,7 +828,10 @@ abstract class DataItem {
 
   public function __get($name) {
     if ($name != 'value') {
-      throw new InvalidAccessException("For a single-valued item, the only possible property is 'value', attempt to get '$name'.");
+      throw new InvalidAccessException(sprintf("For a single-valued item, the only possible property is 'value', attempt to get '%s' at address %s.",
+        $name,
+        $this->getAddress(),
+      ));
     }
 
     return $this->get();
